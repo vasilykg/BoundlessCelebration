@@ -17,6 +17,10 @@
             color: #fff;
             position: relative;
             overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
 
         /* Декор рамки */
@@ -26,7 +30,6 @@
             height: 80px;
             z-index: 5;
             pointer-events: none;
-            position: fixed;
             left: 0;
         }
 
@@ -100,7 +103,7 @@
         .progress-bar {
             height: 100%;
             background: linear-gradient(to right, #4caf50, #8bc34a);
-            width: 0%;
+            width: 0;
             transition: width 0.2s;
         }
 
@@ -204,8 +207,46 @@
         .status-progress-bar {
             height: 100%;
             background: #ffeb3b;
-            width: 0%;
+            width: 0;
             transition: width linear;
+        }
+
+        /* Счётчик снежинок */
+        .snowflake-counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1.2em;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 10;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        .snowflake-counter .icon {
+            font-size: 1.4em;
+        }
+
+        .snowflake-counter .count {
+            min-width: 40px;
+            text-align: right;
+        }
+
+        /* Анимация для счётчика */
+        @keyframes countPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .count-pop {
+            animation: countPop 0.3s ease-out;
         }
 
         /* Снежинки */
@@ -235,8 +276,8 @@
         /* Взрыв снежинки */
         .explosion {
             position: fixed;
-            width: 20px;
-            height: 20px;
+            width: 40px;
+            height: 40px;
             background: radial-gradient(circle, #fff 0%, rgba(255,255,255,0) 80%);
             border-radius: 50%;
             pointer-events: none;
@@ -255,7 +296,6 @@
             width:100%; height:100%;
             background: rgba(0,0,0,0.8);
             color:#fff;
-            display:flex;
             flex-direction: column;
             justify-content: center;
             align-items:center;
@@ -281,6 +321,18 @@
             border-radius:10px;
         }
 
+        .overlay button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .overlay button.timer::after {
+            content: attr(data-time);
+            margin-left: 5px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
         /* Контейнер для фейерверков */
         #fireworksCanvas {
             position: fixed;
@@ -299,7 +351,7 @@
             font-size:3em;
             text-shadow:0 0 10px #fff;
             display:none;
-            z-index: 6;
+            z-index: 4;
         }
 
         /* Звёзды */
@@ -336,6 +388,47 @@
             0% { transform: translateX(0); }
             100% { transform: translateX(-100%); }
         }
+
+        /* Стили для года */
+        .year-text {
+            position: fixed;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5em;
+            font-weight: bold;
+            display: none;
+            z-index: 4;
+            background: linear-gradient(
+                45deg,
+                #ff0000,
+                #ff4400,
+                #ff8800,
+                #ffcc00,
+                #66ff00,
+                #00ffff,
+                #0088ff,
+                #0000ff
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 
+                2px 2px 4px rgba(255,255,255,0.3),
+                -2px -2px 4px rgba(255,255,255,0.3);
+            animation: yearGlow 2s infinite alternate;
+        }
+
+        @keyframes yearGlow {
+            0% {
+                filter: brightness(1) blur(0px);
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                filter: brightness(1.5) blur(1px);
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+        }
     </style>
 </head>
 <body>
@@ -345,8 +438,8 @@
 <div class="spinner" id="spinner"></div>
 <div class="loading-text" id="loading-text">Подождите, поздравление загружается...</div>
 <div class="progress-container" id="progress-container">
-    <div class="progress-bar" id="mainProgressBar"></div>
     <div class="progress-percentage" id="mainProgressPercent">0%</div>
+    <div class="progress-bar" id="mainProgressBar"></div>
 </div>
 
 <div class="accelerate-container" id="accelerate-container">
@@ -366,12 +459,18 @@
     <h1>Слишком много поздравлений! Загрузить не получилось.</h1>
     <div>
         <button id="reloadBtn">Попробовать ещё раз</button>
-        <button id="celebrateBtn">Порадоваться просто так</button>
+        <button id="celebrateBtn">Всё равно порадоваться</button>
     </div>
 </div>
 
 <canvas id="fireworksCanvas"></canvas>
 <div class="celebration-message" id="celebrationMsg">С Новым годом!</div>
+<div class="year-text" id="yearText">2025</div>
+
+<div class="snowflake-counter">
+    <span class="icon">❄</span>
+    <span class="count" id="snowflakeCount">0</span>
+</div>
 
 <script>
     let MAX_TIME = 5 * 60 * 1000; // 5 минут
@@ -416,22 +515,28 @@
     }
 
     // Основной прогресс
-    let progress = 0;
+    const bar = document.getElementById('mainProgressBar');
+    const percText = document.getElementById('mainProgressPercent');
     function updateMainProgress() {
-        const now = Date.now();
-        if (now - startTime > MAX_TIME) {
+        let now = Date.now();
+        let elapsedTime = now - startTime;
+        
+        // Рассчитываем прогресс на основе прошедшего времени
+        let timeRatio = elapsedTime / MAX_TIME;
+        if (timeRatio > 1) timeRatio = 1;
+        let progress = 99 * (1 - Math.pow(1 - timeRatio, 20));
+        
+        // Убеждаемся, что не превысим 99%
+        if (progress > 99) progress = 99;
+        bar.style.width = progress + '%';
+        percText.textContent = Math.floor(progress) + '%';
+        
+        if (elapsedTime > MAX_TIME) {
             // Показываем оверлей
             document.getElementById('overlay').style.display = 'flex';
             clearInterval(mainProgressInterval);
             return;
         }
-        const increment = (100 - progress) * 0.005;
-        progress += increment;
-        if (progress > 99.99) progress = 99.99;
-        const bar = document.getElementById('mainProgressBar');
-        const percText = document.getElementById('mainProgressPercent');
-        bar.style.width = progress + '%';
-        percText.textContent = Math.floor(progress) + '%';
     }
     const mainProgressInterval = setInterval(updateMainProgress, 200);
 
@@ -472,19 +577,33 @@
 
     updateStatus();
 
-    // Снежинки
-    function createSnowflake() {
-        //if (Date.now() - startTime > MAX_TIME) return;
+    // Счётчик снежинок
+    let snowflakeCount = parseInt(localStorage.getItem('snowflakeCount') || '0');
+    const snowflakeCountElement = document.getElementById('snowflakeCount');
+    // Инициализируем значение из localStorage
+    snowflakeCountElement.textContent = snowflakeCount;
 
+    function updateSnowflakeCount() {
+        snowflakeCount++;
+        snowflakeCountElement.textContent = snowflakeCount;
+        // Сохраняем новое значение в localStorage
+        localStorage.setItem('snowflakeCount', snowflakeCount.toString());
+        // Анимация
+        snowflakeCountElement.classList.remove('count-pop');
+        void snowflakeCountElement.offsetWidth; // Сброс анимации
+        snowflakeCountElement.classList.add('count-pop');
+    }
+
+    function createSnowflake() {
         const snowflake = document.createElement('div');
         snowflake.classList.add('snowflake');
         snowflake.innerHTML = '❄';
 
-        const size = Math.random() * 20 + 10;
+        const size = Math.random() * 40 + 10;
         snowflake.style.fontSize = size + 'px';
         const left = Math.random() * 100;
         snowflake.style.left = left + 'vw';
-        const duration = Math.random() * 5 + 5;
+        const duration = Math.random() * 20 + 5;
         snowflake.style.animationDuration = duration + 's';
 
         snowflake.addEventListener('click', () => {
@@ -496,6 +615,7 @@
             explosion.style.top = rect.top + rect.height/2 + 'px';
             document.body.appendChild(explosion);
             setTimeout(() => explosion.remove(), 500);
+            updateSnowflakeCount(); // Обновляем счётчик
         });
 
         document.body.appendChild(snowflake);
@@ -557,6 +677,39 @@
         location.reload();
     });
 
+    // Функция для обработки таймера на кнопке
+    function startCelebrateBtnTimer() {
+        let timeLeft = 3;
+        celebrateBtn.disabled = true;
+        celebrateBtn.classList.add('timer');
+        celebrateBtn.setAttribute('data-time', `(${timeLeft})`);
+
+        const timer = setInterval(() => {
+            timeLeft--;
+            celebrateBtn.setAttribute('data-time', `(${timeLeft})`);
+            
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                celebrateBtn.disabled = false;
+                celebrateBtn.classList.remove('timer');
+                celebrateBtn.removeAttribute('data-time');
+            }
+        }, 1000);
+    }
+
+    // Запускаем таймер при показе оверлея
+    Object.defineProperty(overlay.style, 'display', {
+        set: function(value) {
+            this.cssText = `display: ${value}`;
+            if (value === 'flex') {
+                startCelebrateBtnTimer();
+            }
+        },
+        get: function() {
+            return this.cssText.replace('display: ', '');
+        }
+    });
+
     celebrateBtn.addEventListener('click', () => {
         overlay.style.display = 'none';
         spinner.style.display = 'none';
@@ -573,6 +726,7 @@
         
         startFireworks();
         celebrationMsg.style.display = 'block';
+            document.getElementById('yearText').style.display = 'block';
     });
 
     // Фейерверки
@@ -608,8 +762,8 @@
         ctx.clearRect(0,0,fireworksCanvas.width, fireworksCanvas.height);
         for (let i=0;i<fireworks.length;i++){
             const particles = fireworks[i];
-            for (let j=0;j<particles.length;j++){
-                const p = particles[j];
+            for (const element of particles) {
+                const p = element;
                 p.x += p.vx;
                 p.y += p.vy;
                 p.life--;
@@ -723,13 +877,8 @@
         const containerWidth = window.innerWidth;
         // Базовый уровень и амплитуда дуги
         let baseY, amplitude;
-        if (arcDirection === 'down') {
-            baseY = 0;
-            amplitude = 30;
-        } else {
-            baseY = 0;
-            amplitude = 30;
-        }
+        baseY = 0;
+        amplitude = 40;
 
         // Количество дуг (нечётное число)
         const numArcs = 5;
@@ -762,6 +911,36 @@
             container.appendChild(symbol);
         }
     }
+
+    // Добавляем кнопку сброса при наведении
+    const snowflakeCounter = document.querySelector('.snowflake-counter');
+    const resetButton = document.createElement('button');
+    resetButton.innerHTML = '↺';
+    resetButton.style.cssText = `
+        display: none;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.2em;
+        cursor: pointer;
+        padding: 0 0 0 10px;
+        transition: transform 0.3s;
+    `;
+    resetButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        snowflakeCount = 0;
+        snowflakeCountElement.textContent = '0';
+        localStorage.setItem('snowflakeCount', '0');
+        resetButton.style.transform = 'rotate(360deg)';
+    });
+    snowflakeCounter.appendChild(resetButton);
+
+    snowflakeCounter.addEventListener('mouseenter', () => {
+        resetButton.style.display = 'block';
+    });
+    snowflakeCounter.addEventListener('mouseleave', () => {
+        resetButton.style.display = 'none';
+    });
 
 </script>
 </body>
