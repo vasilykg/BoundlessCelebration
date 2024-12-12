@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Загрузка поздравления</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: sans-serif;
+            background: linear-gradient(to bottom, #001833, #003f7f);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Декор рамки */
+        .top-decoration, .bottom-decoration {
+            position: fixed;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            overflow: hidden;
+            gap:5px;
+        }
+        .top-decoration {
+            top: 0;
+        }
+        .bottom-decoration {
+            bottom: 0;
+            transform: rotate(180deg);
+        }
+
+        .spinner {
+            margin-bottom: 20px;
+            width: 50px;
+            height: 50px;
+            border: 6px solid rgba(255,255,255,0.3);
+            border-top: 6px solid #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px rgba(255,255,255,0.5);
+            z-index: 1;
+            text-align: center;
+        }
+
+        .progress-container {
+            width: 80%;
+            max-width: 400px;
+            background: rgba(255,255,255,0.2);
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #4caf50, #8bc34a);
+            width: 0%;
+            transition: width 0.2s;
+        }
+
+        .progress-percentage {
+            text-align: center;
+            width: 100%;
+            line-height: 20px;
+            position: absolute;
+            color: #fff;
+            font-size: 0.9em;
+            text-shadow: 0 0 2px rgba(0,0,0,0.5);
+        }
+
+        /* Кнопка ускорения и сообщение о поломке */
+        .accelerate-container {
+            position: relative;
+            margin-bottom: 40px;
+            z-index:1;
+        }
+
+        .accelerate-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #00cc00, #008800);
+            border: none;
+            border-radius: 20px;
+            color: #fff;
+            font-size:1em;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+            text-shadow: 0 0 2px rgba(0,0,0,0.5);
+            transition: transform 0.2s;
+        }
+        .accelerate-button2 {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #0069cc, #000288);
+            border: none;
+            border-radius: 20px;
+            color: #fff;
+            font-size:1em;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+            text-shadow: 0 0 2px rgba(0,0,0,0.5);
+            transition: transform 0.2s;
+        }
+
+        .accelerate-button:hover {
+            transform: scale(1.1);
+        }
+
+        .accelerate-message {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, #ff7f7f, #ffa07f);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            margin-top:5px;
+            white-space: nowrap;
+            box-shadow:0 0 5px rgba(0,0,0,0.3);
+        }
+
+        .status-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            height: 30px;
+            padding: 0 10px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .status-text {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .status-progress-container {
+            width: 200px;
+            background: rgba(255,255,255,0.2);
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-left: 10px;
+            position: relative;
+        }
+
+        .status-progress-bar {
+            height: 100%;
+            background: #ffeb3b;
+            width: 0%;
+            transition: width linear;
+        }
+
+        /* Снежинки */
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            color: #fff;
+            font-size: 1em;
+            opacity: 0.8;
+            pointer-events: auto;
+            cursor: pointer;
+            animation: snowfall linear infinite;
+            z-index: 2;
+        }
+
+        @keyframes snowfall {
+            0% {
+                transform: translateY(-10px) translateX(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) translateX(0);
+                opacity: 0.5;
+            }
+        }
+
+        /* Взрыв снежинки */
+        .explosion {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #fff 0%, rgba(255,255,255,0) 80%);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: explode 0.5s forwards;
+            z-index: 3;
+        }
+        @keyframes explode {
+            0% {transform: scale(0.5); opacity:1;}
+            100% {transform: scale(3); opacity:0;}
+        }
+
+        /* Оверлей по истечении N минут */
+        .overlay {
+            position: fixed;
+            top:0; left:0;
+            width:100%; height:100%;
+            background: rgba(0,0,0,0.8);
+            color:#fff;
+            display:flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items:center;
+            text-align:center;
+            z-index:999;
+            padding:20px;
+            box-sizing:border-box;
+            display:none;
+        }
+
+        .overlay h1 {
+            margin-bottom:20px;
+        }
+
+        .overlay button {
+            margin:10px;
+            padding:10px 20px;
+            background:#fff;
+            color:#000;
+            border:none;
+            cursor:pointer;
+            font-size:1em;
+            border-radius:10px;
+        }
+
+        /* Контейнер для фейерверков */
+        #fireworksCanvas {
+            position: fixed;
+            top:0; left:0;
+            width:100%; height:100%;
+            z-index:1000;
+            display:none;
+        }
+
+        .celebration-message {
+            position: fixed;
+            top: 50%;
+            left:50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size:3em;
+            text-shadow:0 0 10px #fff;
+            display:none;
+            z-index:1001;
+        }
+
+        /* Звёзды */
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: twinkle 2s infinite;
+        }
+
+        @keyframes twinkle {
+            0%,100% { opacity:0.5; }
+            50% {opacity:1;}
+        }
+    </style>
+</head>
+<body>
+<div class="top-decoration" id="topDecoration"></div>
+<div class="bottom-decoration" id="bottomDecoration"></div>
+
+<div class="spinner" id="spinner"></div>
+<div class="loading-text" id="loading-text">Подождите, поздравление загружается...</div>
+<div class="progress-container" id="progress-container">
+    <div class="progress-bar" id="mainProgressBar"></div>
+    <div class="progress-percentage" id="mainProgressPercent">0%</div>
+</div>
+
+<div class="accelerate-container" id="accelerate-container">
+    <button class="accelerate-button" id="accelerateBtn">Ускорить загрузку</button>
+    <button class="accelerate-button2" id="accelerateBtn2">Тоже ускорить загрузку, но синего цвета</button>
+    <div class="accelerate-message" id="accelerateMsg">An error has occurred. Contact the administrator.</div>
+</div>
+
+<div class="status-bar">
+    <div class="status-text" id="statusText">Загружаем поздравление...</div>
+    <div class="status-progress-container">
+        <div class="status-progress-bar" id="statusProgress"></div>
+    </div>
+</div>
+
+<div class="overlay" id="overlay">
+    <h1>Слишком много поздравлений! Загрузить не получилось.</h1>
+    <div>
+        <button id="reloadBtn">Попробовать ещё раз</button>
+        <button id="celebrateBtn">Порадоваться просто так</button>
+    </div>
+</div>
+
+<canvas id="fireworksCanvas"></canvas>
+<div class="celebration-message" id="celebrationMsg">С Новым годом!</div>
+
+<script>
+    let MAX_TIME = 5 * 60 * 1000; // 5 минут
+    const startTime = Date.now();
+
+    // Список фраз для нижнего статус-бара
+    const phrases = [
+        "Загружаем поздравление от %USERNAME%...",
+        "%USERNAME% подготавливает персональный подарок...",
+        "%USERNAME% калибрует волшебные снежинки...",
+        "Достаем мандарины из тайных запасов %USERNAME%...",
+        "Упаковываем теплые пожелания от %USERNAME%...",
+        "%USERNAME% выпекает имбирные печеньки...",
+        "%USERNAME% примеряет костюм Деда Мороза...",
+        "Олени заправляются сказочным топливом...",
+        "Вычисляем радиус улыбки...",
+        "Затягиваем санки креативности...",
+        "Греем мандаринки на батарее...",
+        "Заворачиваем настроение в блестящую упаковку...",
+        "%USERNAME% сервирует праздничный стол...",
+        "%USERNAME% генерирует конфетти из приятных слов...",
+        "Наполняем бокал вдохновения...",
+        "Запускаем хоровод из теплых пожеланий...",
+        "Подслащиваем тёплый чай радостью...",
+        "%USERNAME% открывает потайной сундук с добрыми словами...",
+        "%USERNAME% сортирует искорки волшебства по яркости..."
+    ];
+
+    // Список имён (можно добавить больше)
+    const usernames = [
+        "Vasily Kiryukhin",
+        "Aleksey Egupov",
+        "Danila Slynko",
+        "Ilya Kopytov"
+    ];
+
+    function getRandomElement(arr) {
+        const idx = Math.floor(Math.random() * arr.length);
+        return arr[idx];
+    }
+
+    // Основной прогресс
+    let progress = 0;
+    function updateMainProgress() {
+        const now = Date.now();
+        if (now - startTime > MAX_TIME) {
+            // Показываем оверлей
+            document.getElementById('overlay').style.display = 'flex';
+            clearInterval(mainProgressInterval);
+            return;
+        }
+        const increment = (100 - progress) * 0.005;
+        progress += increment;
+        if (progress > 99.99) progress = 99.99;
+        const bar = document.getElementById('mainProgressBar');
+        const percText = document.getElementById('mainProgressPercent');
+        bar.style.width = progress + '%';
+        percText.textContent = Math.floor(progress) + '%';
+    }
+    const mainProgressInterval = setInterval(updateMainProgress, 200);
+
+    // Статус-бар
+    const statusText = document.getElementById('statusText');
+    const statusProgress = document.getElementById('statusProgress');
+
+    function updateStatus() {
+        const now = Date.now();
+        if (now - startTime > MAX_TIME) {
+            return;
+        }
+
+        // Выбираем рандомное время обновления от 3 до 5 сек
+        const nextDelay = 3000 + Math.random() * 2000;
+
+        let phrase = getRandomElement(phrases);
+        let currentUsername = getRandomElement(usernames);
+        phrase = phrase.replace('%USERNAME%', currentUsername);
+        statusText.textContent = phrase;
+
+        // Сброс прогресса до 0%
+        statusProgress.style.transition = 'none';
+        statusProgress.style.width = '0%';
+
+        // Чтобы применился сброс, перерисуем
+        requestAnimationFrame(() => {
+            // Теперь устанавливаем продолжительность анимации равную nextDelay
+            statusProgress.style.transition = `width ${nextDelay}ms linear`;
+            // И запускаем "заполнение"
+            requestAnimationFrame(() => {
+                statusProgress.style.width = '100%';
+            });
+        });
+
+        // Планируем следующее обновление статуса
+        setTimeout(updateStatus, nextDelay);
+    }
+
+    updateStatus();
+
+    // Снежинки
+    function createSnowflake() {
+        if (Date.now() - startTime > MAX_TIME) return;
+
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        snowflake.innerHTML = '❄';
+
+        const size = Math.random() * 20 + 10;
+        snowflake.style.fontSize = size + 'px';
+        const left = Math.random() * 100;
+        snowflake.style.left = left + 'vw';
+        const duration = Math.random() * 5 + 5;
+        snowflake.style.animationDuration = duration + 's';
+
+        snowflake.addEventListener('click', () => {
+            const rect = snowflake.getBoundingClientRect();
+            snowflake.remove();
+            const explosion = document.createElement('div');
+            explosion.classList.add('explosion');
+            explosion.style.left = rect.left + rect.width/2 + 'px';
+            explosion.style.top = rect.top + rect.height/2 + 'px';
+            document.body.appendChild(explosion);
+            setTimeout(() => explosion.remove(), 500);
+        });
+
+        document.body.appendChild(snowflake);
+        setTimeout(() => {
+            if (snowflake.parentNode) snowflake.remove();
+        }, duration * 1000);
+    }
+
+    setInterval(createSnowflake, 300);
+
+    // Звезды - большее количество
+    function createStar() {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        star.style.left = x + 'vw';
+        star.style.top = y + 'vh';
+        const duration = (Math.random()*2+1) + 's';
+        star.style.animationDuration = duration;
+        document.body.appendChild(star);
+        setTimeout(() => {
+            if (star.parentNode) star.remove();
+        }, 15000);
+    }
+
+    for (let i=0; i<200; i++) {
+        createStar();
+    }
+    setInterval(createStar, 1500);
+
+    // Кнопка ускорения
+    const accelerateBtn = document.getElementById('accelerateBtn');
+    const accelerateMsg = document.getElementById('accelerateMsg');
+    accelerateBtn.addEventListener('click', () => {
+        accelerateMsg.style.display = 'block';
+        setTimeout(() => {
+            accelerateMsg.style.display = 'none';
+        }, 2000);
+    });
+    const accelerateBtn2 = document.getElementById('accelerateBtn2');
+    accelerateBtn2.addEventListener('click', () => {
+        MAX_TIME -= (0.5 * 60 * 1000);
+    });
+
+    const spinner = document.getElementById('spinner');
+    const loadingText = document.getElementById('loading-text');
+    const progressContainer = document.getElementById('progress-container');
+    const accelerateContainer = document.getElementById('accelerate-container');
+
+    // Оверлей
+    const overlay = document.getElementById('overlay');
+    const reloadBtn = document.getElementById('reloadBtn');
+    const celebrateBtn = document.getElementById('celebrateBtn');
+    const fireworksCanvas = document.getElementById('fireworksCanvas');
+    const celebrationMsg = document.getElementById('celebrationMsg');
+
+    reloadBtn.addEventListener('click', () => {
+        location.reload();
+    });
+
+    celebrateBtn.addEventListener('click', () => {
+        overlay.style.display = 'none';
+        spinner.style.display = 'none';
+        loadingText.style.display = 'none';
+        progressContainer.style.display = 'none';
+        accelerateContainer.style.display = 'none';
+        startFireworks();
+        celebrationMsg.style.display = 'block';
+    });
+
+    // Фейерверки
+    const ctx = fireworksCanvas.getContext('2d');
+    let fireworks = [];
+    let lastTime = 0;
+
+    function randomColor() {
+        const r = Math.floor(Math.random()*255);
+        const g = Math.floor(Math.random()*255);
+        const b = Math.floor(Math.random()*255);
+        return `rgb(${r},${g},${b})`;
+    }
+
+    function createFirework() {
+        const x = Math.random()*window.innerWidth;
+        const y = Math.random()*window.innerHeight/2;
+        const particles = [];
+        for (let i=0;i<30;i++){
+            particles.push({
+                x:x,
+                y:y,
+                vx: (Math.random()-0.5)*4,
+                vy: (Math.random()-0.5)*4,
+                color: randomColor(),
+                life: 100
+            });
+        }
+        fireworks.push(particles);
+    }
+
+    function updateFireworks() {
+        ctx.clearRect(0,0,fireworksCanvas.width, fireworksCanvas.height);
+        for (let i=0;i<fireworks.length;i++){
+            const particles = fireworks[i];
+            for (let j=0;j<particles.length;j++){
+                const p = particles[j];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life--;
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x, p.y, 2,2);
+            }
+            fireworks[i] = particles.filter(p=>p.life>0);
+        }
+        fireworks = fireworks.filter(f=>f.length>0);
+    }
+
+    function loopFireworks(timestamp) {
+        if (!lastTime) lastTime=timestamp;
+        const delta = timestamp - lastTime;
+        if (delta > 500) { // новый фейерверк каждые 0.5 сек
+            createFirework();
+            lastTime=timestamp;
+        }
+        updateFireworks();
+        requestAnimationFrame(loopFireworks);
+    }
+
+    function startFireworks() {
+        fireworksCanvas.style.display = 'block';
+        fireworksCanvas.width = window.innerWidth;
+        fireworksCanvas.height = window.innerHeight;
+        requestAnimationFrame(loopFireworks);
+    }
+
+    window.addEventListener('resize', () => {
+        fireworksCanvas.width = window.innerWidth;
+        fireworksCanvas.height = window.innerHeight;
+    });
+
+    // Генерация случайной расцветки для рамки
+    const topDec = document.getElementById('topDecoration');
+    const bottomDec = document.getElementById('bottomDecoration');
+    const symbolsTop = generateSymbols(30);
+    const symbolsBottom = generateSymbols(30);
+
+    symbolsTop.forEach(sym => topDec.appendChild(sym));
+    symbolsBottom.forEach(sym => bottomDec.appendChild(sym));
+
+    function generateSymbols(count) {
+        const symbols = [];
+        const chars = ['❇','✿'];
+        for (let i=0; i<count; i++) {
+            const el = document.createElement('span');
+            el.textContent = getRandomElement(chars);
+            el.style.color = randomBrightColor();
+            el.style.fontSize = Math.random() < 0.5 ? '20px' : '30px';
+            el.style.textShadow = `0 0 5px ${el.style.color}`;
+            symbols.push(el);
+        }
+        return symbols;
+    }
+
+    function randomBrightColor() {
+        // Генерируем яркий цвет (увеличим вероятность ярких тонов)
+        let r, g, b;
+        do {
+            r = Math.floor(Math.random()*256);
+            g = Math.floor(Math.random()*256);
+            b = Math.floor(Math.random()*256);
+        } while ((r+g+b)<300); // пока сумма не будет достаточно большой (яркий цвет)
+        return `rgb(${r},${g},${b})`;
+    }
+
+</script>
+</body>
+</html>
