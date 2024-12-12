@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Загрузка поздравления</title>
     <style>
         body {
@@ -22,23 +22,42 @@
         /* Декор рамки */
         .top-decoration, .bottom-decoration {
             position: fixed;
-            left: 0;
             width: 100%;
             height: 80px;
             z-index: 5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             pointer-events: none;
-            overflow: hidden;
-            gap:5px;
+            position: fixed;
+            left: 0;
         }
+
         .top-decoration {
             top: 0;
+            position: fixed;
         }
+
         .bottom-decoration {
             bottom: 0;
-            transform: rotate(180deg);
+            position: fixed;
+        }
+
+        .top-decoration span, .bottom-decoration span {
+            position: absolute;
+            user-select: none;
+            animation: blink 1.5s infinite;
+        }
+
+        /* Разные задержки для разных символов */
+        .top-decoration span:nth-child(3n) {
+            animation-delay: 0.5s;
+        }
+        .top-decoration span:nth-child(3n+1) {
+            animation-delay: 1s;
+        }
+        .bottom-decoration span:nth-child(3n) {
+            animation-delay: 0.5s;
+        }
+        .bottom-decoration span:nth-child(3n+1) {
+            animation-delay: 1s;
         }
 
         .spinner {
@@ -298,6 +317,25 @@
             0%,100% { opacity:0.5; }
             50% {opacity:1;}
         }
+
+        /* Анимация мигания для гирлянд */
+        @keyframes blink {
+            0%, 100% { opacity: 1; filter: brightness(1); }
+            50% { opacity: 0.5; filter: brightness(0.5); }
+        }
+
+        /* Стиль для бегущей строки */
+        .marquee {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+            white-space: nowrap;
+            padding-left: 100%;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
     </style>
 </head>
 <body>
@@ -367,7 +405,9 @@
         "Vasily Kiryukhin",
         "Aleksey Egupov",
         "Danila Slynko",
-        "Ilya Kopytov"
+        "Ilya Kopytov",
+        "Pavel Demenin",
+        "Vadim Zverev"
     ];
 
     function getRandomElement(arr) {
@@ -435,7 +475,7 @@
 
     // Снежинки
     function createSnowflake() {
-        if (Date.now() - startTime > MAX_TIME) return;
+        //if (Date.now() - startTime > MAX_TIME) return;
 
         const snowflake = document.createElement('div');
         snowflake.classList.add('snowflake');
@@ -524,6 +564,15 @@
         loadingText.style.display = 'none';
         progressContainer.style.display = 'none';
         accelerateContainer.style.display = 'none';
+        
+        // Убираем прогресс-бар из статусной строки
+        document.querySelector('.status-progress-container').style.display = 'none';
+        
+        // Создаем бегущую строку из имен
+        const statusText = document.getElementById('statusText');
+        const marqueeText = usernames.join(' ⭐ ') + ' ⭐ ' + usernames.join(' ⭐ '); // Дублируем имена для непрерывности
+        statusText.innerHTML = `<span class="marquee">${marqueeText}</span>`;
+        
         startFireworks();
         celebrationMsg.style.display = 'block';
     });
@@ -567,7 +616,7 @@
                 p.y += p.vy;
                 p.life--;
                 ctx.fillStyle = p.color;
-                ctx.fillRect(p.x, p.y, 2,2);
+                ctx.fillRect(p.x, p.y, 5, 5); // Увеличил размер частиц с 2x2 до 5x5 пикселей
             }
             fireworks[i] = particles.filter(p=>p.life>0);
         }
@@ -597,29 +646,59 @@
         fireworksCanvas.height = window.innerHeight;
     });
 
-    // Генерация случайной расцветки для рамки
+    // Генерация символов с дугообразным расположением
     const topDec = document.getElementById('topDecoration');
     const bottomDec = document.getElementById('bottomDecoration');
-    const symbolsTop = generateSymbols(30);
-    const symbolsBottom = generateSymbols(30);
 
-    symbolsTop.forEach(sym => topDec.appendChild(sym));
-    symbolsBottom.forEach(sym => bottomDec.appendChild(sym));
+    // Функция для расчета оптимального количества символов
+    function calculateSymbolCount() {
+        const screenWidth = window.innerWidth;
+        // Примерно один символ каждые 40 пикселей
+        return Math.floor(screenWidth / 40);
+    }
 
+    // Функция генерации символов
     function generateSymbols(count) {
-        const symbols = [];
-        const chars = ['❇','✿'];
+        const chars = ['❇', '✿', '❄', '⭐', '✨', '🎄', '🎁', '🔔', '✦'];
+        const arr = [];
         for (let i=0; i<count; i++) {
             const el = document.createElement('span');
             el.textContent = getRandomElement(chars);
             el.style.color = randomBrightColor();
             el.style.fontSize = Math.random() < 0.5 ? '20px' : '30px';
             el.style.textShadow = `0 0 5px ${el.style.color}`;
-            symbols.push(el);
+            arr.push(el);
         }
-        return symbols;
+        return arr;
     }
 
+    // Функция обновления гирлянд
+    function updateGarlands() {
+        const symbolCount = calculateSymbolCount();
+        const topSymbols = generateSymbols(symbolCount);
+        const bottomSymbols = generateSymbols(symbolCount);
+        
+        // Очищаем существующие символы
+        topDec.innerHTML = '';
+        bottomDec.innerHTML = '';
+        
+        // Располагаем новые символы
+        positionArcSymbols(topDec, topSymbols, 'down');
+        positionArcSymbols(bottomDec, bottomSymbols, 'up');
+    }
+
+    // Инициализация гирлянд
+    updateGarlands();
+
+    // Обновление при изменении размера окна
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        // Используем debounce для оптимизации производительности
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(updateGarlands, 250);
+    });
+
+    // Случайный яркий цвет
     function randomBrightColor() {
         // Генерируем яркий цвет (увеличим вероятность ярких тонов)
         let r, g, b;
@@ -629,6 +708,61 @@
             b = Math.floor(Math.random()*256);
         } while ((r+g+b)<300); // пока сумма не будет достаточно большой (яркий цвет)
         return `rgb(${r},${g},${b})`;
+    }
+
+    // Располагаем символы дугой
+    function positionArcSymbols(container, symbols, arcDirection='down') {
+        // arcDirection = 'down' для верхней дуги, 'up' для нижней
+        container.style.position = 'fixed';
+        container.style.left = '0';
+        container.style.height = '80px';
+        container.style.width = '100%';
+        container.style.overflow = 'visible';
+        container.style.pointerEvents = 'none';
+        container.style.position = 'fixed';
+
+        const count = symbols.length;
+        const containerWidth = window.innerWidth;
+        // Базовый уровень и амплитуда дуги
+        let baseY, amplitude;
+        if (arcDirection === 'down') {
+            baseY = 0;
+            amplitude = 30;
+        } else {
+            baseY = 0;
+            amplitude = 30;
+        }
+
+        // Количество дуг (нечётное число)
+        const numArcs = 5;
+        
+        for (let i = 0; i < count; i++) {
+            const symbol = symbols[i];
+            const norm = i / (count - 1);
+            
+            // Определяем, к какой дуге относится символ
+            const arcIndex = Math.floor(norm * numArcs);
+            // Нормализованная позиция внутри текущей дуги
+            const arcNorm = (norm * numArcs) % 1;
+            
+            // Синусоида с несколькими периодами
+            const sineVal = Math.sin(Math.PI * arcNorm);
+
+            let topPos;
+            if (arcDirection === 'down') {
+                topPos = baseY + amplitude * sineVal;
+            } else {
+                topPos = baseY - amplitude * sineVal;
+            }
+
+            const segmentWidth = containerWidth / numArcs;
+            const leftPos = (arcIndex * segmentWidth) + (arcNorm * segmentWidth);
+            
+            symbol.style.position = 'absolute';
+            symbol.style.top = topPos + 'px';
+            symbol.style.left = leftPos + 'px';
+            container.appendChild(symbol);
+        }
     }
 
 </script>
