@@ -218,7 +218,7 @@
             pointer-events: auto;
             cursor: pointer;
             animation: snowfall linear infinite;
-            z-index: 2;
+            z-index: 5;
         }
 
         @keyframes snowfall {
@@ -241,7 +241,7 @@
             border-radius: 50%;
             pointer-events: none;
             animation: explode 0.5s forwards;
-            z-index: 3;
+            z-index: 5;
         }
         @keyframes explode {
             0% {transform: scale(0.5); opacity:1;}
@@ -286,7 +286,7 @@
             position: fixed;
             top:0; left:0;
             width:100%; height:100%;
-            z-index:1000;
+            z-index: 4;
             display:none;
         }
 
@@ -299,7 +299,7 @@
             font-size:3em;
             text-shadow:0 0 10px #fff;
             display:none;
-            z-index:1001;
+            z-index: 6;
         }
 
         /* Звёзды */
@@ -356,7 +356,7 @@
 </div>
 
 <div class="status-bar">
-    <div class="status-text" id="statusText">Загружаем поздравление...</div>
+    <div class="status-text" id="statusText">Подождите, поздравление загружается...</div>
     <div class="status-progress-container">
         <div class="status-progress-bar" id="statusProgress"></div>
     </div>
@@ -435,8 +435,7 @@
     }
     const mainProgressInterval = setInterval(updateMainProgress, 200);
 
-    // Статус-бар
-    const statusText = document.getElementById('statusText');
+    const loadingText = document.getElementById('loading-text');
     const statusProgress = document.getElementById('statusProgress');
 
     function updateStatus() {
@@ -451,7 +450,7 @@
         let phrase = getRandomElement(phrases);
         let currentUsername = getRandomElement(usernames);
         phrase = phrase.replace('%USERNAME%', currentUsername);
-        statusText.textContent = phrase;
+        loadingText.textContent = phrase;
 
         // Сброс прогресса до 0%
         statusProgress.style.transition = 'none';
@@ -543,7 +542,7 @@
     });
 
     const spinner = document.getElementById('spinner');
-    const loadingText = document.getElementById('loading-text');
+    const statusText = document.getElementById('statusText');
     const progressContainer = document.getElementById('progress-container');
     const accelerateContainer = document.getElementById('accelerate-container');
 
@@ -569,7 +568,6 @@
         document.querySelector('.status-progress-container').style.display = 'none';
         
         // Создаем бегущую строку из имен
-        const statusText = document.getElementById('statusText');
         const marqueeText = usernames.join(' ⭐ ') + ' ⭐ ' + usernames.join(' ⭐ '); // Дублируем имена для непрерывности
         statusText.innerHTML = `<span class="marquee">${marqueeText}</span>`;
         
