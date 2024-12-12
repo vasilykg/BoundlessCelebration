@@ -100,10 +100,28 @@
             z-index: 1;
         }
 
-        .progress-bar {
+        .progress-bar-green {
             height: 100%;
             background: linear-gradient(to right, #4caf50, #8bc34a);
             width: 0;
+            transition: width 0.2s;
+        }
+        .progress-bar-blue {
+            height: 100%;
+            background: linear-gradient(to right, #005afd, #293081);
+            width: 0%;
+            transition: width 0.2s;
+        }
+        .progress-bar-yellow {
+            height: 100%;
+            background: linear-gradient(to right, #ffeb00, #978329);
+            width: 0%;
+            transition: width 0.2s;
+        }
+        .progress-bar-red {
+            height: 100%;
+            background: linear-gradient(to right, #ea0505, #812f30);
+            width: 0%;
             transition: width 0.2s;
         }
 
@@ -150,8 +168,27 @@
             text-shadow: 0 0 2px rgba(0,0,0,0.5);
             transition: transform 0.2s;
         }
+        .changeColor-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #ea86d8, #c5070e);
+            border: none;
+            border-radius: 20px;
+            color: #fff;
+            font-size:1em;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+            text-shadow: 0 0 2px rgba(0,0,0,0.5);
+            transition: transform 0.2s;
+        }
 
         .accelerate-button:hover {
+            transform: scale(1.1);
+        }
+        .accelerate-button2:hover {
+            transform: scale(1.1);
+        }
+        .changeColor-button:hover {
             transform: scale(1.1);
         }
 
@@ -439,12 +476,13 @@
 <div class="loading-text" id="loading-text">Подождите, поздравление загружается...</div>
 <div class="progress-container" id="progress-container">
     <div class="progress-percentage" id="mainProgressPercent">0%</div>
-    <div class="progress-bar" id="mainProgressBar"></div>
+    <div class="progress-bar-green" id="mainProgressBar"></div>
 </div>
 
 <div class="accelerate-container" id="accelerate-container">
     <button class="accelerate-button" id="accelerateBtn">Ускорить загрузку</button>
     <button class="accelerate-button2" id="accelerateBtn2">Тоже ускорить загрузку, но синего цвета</button>
+    <button class="changeColor-button" id="changeColorBtn">Поменять цвет загрузки</button>
     <div class="accelerate-message" id="accelerateMsg">An error has occurred. Contact the administrator.</div>
 </div>
 
@@ -496,7 +534,9 @@
         "Запускаем хоровод из теплых пожеланий...",
         "Подслащиваем тёплый чай радостью...",
         "%USERNAME% открывает потайной сундук с добрыми словами...",
-        "%USERNAME% сортирует искорки волшебства по яркости..."
+        "%USERNAME% сортирует искорки волшебства по яркости...",
+        "%USERNAME% готовит сани с лета...",
+        "%USERNAME% снял коньки с гвоздя..."
     ];
 
     // Список имён (можно добавить больше)
@@ -659,6 +699,19 @@
     const accelerateBtn2 = document.getElementById('accelerateBtn2');
     accelerateBtn2.addEventListener('click', () => {
         MAX_TIME -= (0.5 * 60 * 1000);
+    });
+    const changeColorBtn = document.getElementById('changeColorBtn');
+    changeColorBtn.addEventListener('click', () => {
+        const bar = document.getElementById('mainProgressBar');
+        if (bar.classList.contains('progress-bar-green')) {
+            bar.classList.replace('progress-bar-green', 'progress-bar-blue');
+        } else if (bar.classList.contains('progress-bar-blue')) {
+            bar.classList.replace('progress-bar-blue', 'progress-bar-yellow');
+        } else if (bar.classList.contains('progress-bar-yellow')) {
+            bar.classList.replace('progress-bar-yellow', 'progress-bar-red');
+        } else if (bar.classList.contains('progress-bar-red')) {
+            bar.classList.replace('progress-bar-red', 'progress-bar-green');
+        }
     });
 
     const spinner = document.getElementById('spinner');
