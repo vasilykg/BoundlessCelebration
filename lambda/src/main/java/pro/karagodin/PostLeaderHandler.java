@@ -2,6 +2,8 @@ package pro.karagodin;
 
 import com.google.gson.Gson;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.function.Function;
 
 public class PostLeaderHandler implements Function<Request, Response> {
@@ -11,7 +13,7 @@ public class PostLeaderHandler implements Function<Request, Response> {
 
 	@Override
 	public Response apply(Request request) {
-		entityManager.postLeader(gson.fromJson(request.body, Leader.class));
+		entityManager.postLeader(gson.fromJson(new String(Base64.getDecoder().decode(request.body), StandardCharsets.UTF_8), Leader.class));
 		return new Response(200, "");
 	}
 }
