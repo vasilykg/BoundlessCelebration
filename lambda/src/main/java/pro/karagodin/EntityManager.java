@@ -38,6 +38,16 @@ public class EntityManager {
 		return leaders;
 	}
 
+	public long getSnowballs() {
+		var wrapper = new Object(){ long s = 0; };
+		execute("select sum(SCORE) as s from LEADERBOARD ", Params.empty(), result -> {
+			var rs = result.getResultSet(0);
+			rs.next();
+			wrapper.s = rs.getColumn("s").getInt64();
+		});
+		return wrapper.s;
+	}
+
 	public void postLeader(Leader leader) {
 		execute("declare $NAME as Utf8;" +
 						"declare $SCORE as Int32;" +
@@ -46,6 +56,10 @@ public class EntityManager {
 						"$SCORE", PrimitiveValue.int32(leader.getScore())),
 				null
 		);
+	}
+
+	public void deleteTable() {
+		execute("delete from LEADERBOARD", Params.empty(), null);
 	}
 
 	private void execute(String query, Params params, Consumer<DataQueryResult> callback) {
