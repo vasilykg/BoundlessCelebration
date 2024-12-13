@@ -1211,7 +1211,6 @@
         const name = prompt("Хотите отправить собранные снежинки? Нужно представиться:");
         const asyncPostCall = async () => {
             try {
-                resetSnowFlakeCount();
                 const response = await fetch('https://functions.yandexcloud.net/d4ecqkmrugqls3jbh3f6', {
                     method: 'POST',
                     headers: {
@@ -1222,6 +1221,7 @@
                         score: snowflakeCount
                     })
                 });
+                resetSnowFlakeCount();
                 await response;
             } catch(error) {
                 console.log(error)
