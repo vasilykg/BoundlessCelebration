@@ -136,38 +136,72 @@
         }
 
         /* Кнопка ускорения и сообщение о поломке */
-        .accelerate-container {
+        .buttons-container {
             position: relative;
             margin-bottom: 40px;
-            z-index:1;
+            z-index: 1;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            gap: 10px;
         }
 
-        .accelerate-button {
-            display: inline-block;
-            padding: 10px 20px;
-            background: linear-gradient(45deg, #00cc00, #008800);
+        .custom-button {
             border: none;
+            padding: 10px 20px;
             border-radius: 20px;
-            color: #fff;
-            font-size:1em;
             cursor: pointer;
+            transition: transform 0.2s;
+            color: white;
+            font-size: 1em;
             box-shadow: 0 0 5px rgba(0,0,0,0.3);
             text-shadow: 0 0 2px rgba(0,0,0,0.5);
-            transition: transform 0.2s;
+            white-space: nowrap;
+            margin: 0;
         }
-        .accelerate-button2 {
-            display: inline-block;
-            padding: 10px 20px;
-            background: linear-gradient(45deg, #0069cc, #000288);
-            border: none;
-            border-radius: 20px;
-            color: #fff;
-            font-size:1em;
-            cursor: pointer;
-            box-shadow: 0 0 5px rgba(0,0,0,0.3);
-            text-shadow: 0 0 2px rgba(0,0,0,0.5);
-            transition: transform 0.2s;
+
+        .custom-button:hover {
+            transform: scale(1.1) translateX(0);
         }
+
+        .custom-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: translateX(0) !important;
+        }
+
+        /* Градиенты для разных типов кнопок */
+        .green-gradient {
+            background: linear-gradient(45deg, #65e665, #077907);
+        }
+        .blue-gradient {
+            background: linear-gradient(45deg, #4a54e2, #0f0c99);
+        }
+        .red-gradient {
+            background: linear-gradient(45deg, #f16a6a, #9b0505);
+        }
+        .pink-gradient {
+            background: linear-gradient(45deg, #ea86d8, #770477);
+        }
+        .yellow-gradient {
+            background: linear-gradient(45deg, #ffeb00, #978329);
+        }
+        .orange-gradient {
+            background: linear-gradient(45deg, #ff7f00, #978329);
+        }
+
+        .button-bounce {
+            animation: bounce 1s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
         .changeColor-button {
             display: inline-block;
             padding: 10px 20px;
@@ -180,16 +214,6 @@
             box-shadow: 0 0 5px rgba(0,0,0,0.3);
             text-shadow: 0 0 2px rgba(0,0,0,0.5);
             transition: transform 0.2s;
-        }
-
-        .accelerate-button:hover {
-            transform: scale(1.1);
-        }
-        .accelerate-button2:hover {
-            transform: scale(1.1);
-        }
-        .changeColor-button:hover {
-            transform: scale(1.1);
         }
 
         .accelerate-message {
@@ -264,6 +288,7 @@
             gap: 10px;
             z-index: 10;
             box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
         }
 
         .snowflake-counter .icon {
@@ -416,7 +441,7 @@
         /* Стиль для бегущей строки */
         .marquee {
             display: inline-block;
-            animation: marquee 20s linear infinite;
+            animation: marquee 35s linear infinite;
             white-space: nowrap;
             padding-left: 100%;
         }
@@ -466,6 +491,99 @@
                 transform: translate(-50%, -50%) scale(1.1);
             }
         }
+
+        /* Стили для заблокированных кнопок */
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .self-destruct-button {
+            background: linear-gradient(45deg, #ff4444, #ff0000);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: scale(0);
+            }
+        }
+
+        .add-stars-button,
+        .spawn-snowflakes-button,
+        .bend-garlands-button,
+        .reverse-spinner-button {
+            background: linear-gradient(45deg, #4a90e2, #357abd);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin: 5px;
+        }
+
+        .add-stars-button:hover,
+        .spawn-snowflakes-button:hover,
+        .bend-garlands-button:hover,
+        .reverse-spinner-button:hover,
+        .self-destruct-button:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes spinReverse {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+
+        /* Добавьте эти стили после .count-pop */
+        @keyframes pulseRed {
+            0% {
+                transform: scale(1);
+                background: rgba(255, 0, 0, 0.1);
+                box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+            }
+            50% {
+                transform: scale(1.1);
+                background: rgba(255, 0, 0, 0.2);
+                box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+            }
+            100% {
+                transform: scale(1);
+                background: rgba(255, 0, 0, 0.1);
+                box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+            }
+        }
+
+        .snowflake-counter.inactive {
+            animation: pulseRed 0.5s ease-in-out infinite;
+        }
+
+        /* Обновите стили для плавного перехода */
+        .snowflake-counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1.2em;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 10;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
     </style>
 </head>
 <body>
@@ -479,10 +597,16 @@
     <div class="progress-bar-green" id="mainProgressBar"></div>
 </div>
 
-<div class="accelerate-container" id="accelerate-container">
-    <button class="accelerate-button" id="accelerateBtn">Ускорить загрузку</button>
-    <button class="accelerate-button2" id="accelerateBtn2">Тоже ускорить загрузку, но синего цвета</button>
-    <button class="changeColor-button" id="changeColorBtn">Поменять цвет загрузки</button>
+<div class="buttons-container" id="buttons-container">
+    <button class="custom-button green-gradient" id="accelerateBtn">Ускорить загрузку</button>
+    <button class="custom-button blue-gradient" id="accelerateBtn2">Тоже ускорить загрузку, но синего цвета</button>
+    <button class="custom-button pink-gradient" id="changeColorBtn">Поменять цвет загрузки</button>
+    <button class="custom-button green-gradient button-bounce" id="jumpBtn">Попрыгать</button>
+    <button class="custom-button red-gradient" id="selfDestructBtn">Удалить лишнюю кнопку</button>
+    <button class="custom-button yellow-gradient" id="addStarsBtn">Добавить звёзд на небо</button>
+    <button class="custom-button green-gradient" id="bendGarlandsBtn">Перевесить гирлянды</button>
+    <button class="custom-button blue-gradient" id="spawnSnowflakesBtn">Хочу больше снега!</button>
+    <button class="custom-button orange-gradient" id="reverseSpinnerBtn">Почему не загружается?</button>
     <div class="accelerate-message" id="accelerateMsg">An error has occurred. Contact the administrator.</div>
 </div>
 
@@ -516,27 +640,39 @@
 
     // Список фраз для нижнего статус-бара
     const phrases = [
-        "Загружаем поздравление от %USERNAME%...",
+        "%USERNAME% загружает новогоднее поздравление...",
         "%USERNAME% подготавливает персональный подарок...",
-        "%USERNAME% калибрует волшебные снежинки...",
-        "Достаем мандарины из тайных запасов %USERNAME%...",
-        "Упаковываем теплые пожелания от %USERNAME%...",
+        "%USERNAME% калибрует волшебные снежинки...", 
+        "%USERNAME% достает мандарины из тайных запасов...",
+        "%USERNAME% упаковывает теплые пожелания от...",
         "%USERNAME% выпекает имбирные печеньки...",
         "%USERNAME% примеряет костюм Деда Мороза...",
-        "Олени заправляются сказочным топливом...",
-        "Вычисляем радиус улыбки...",
-        "Затягиваем санки креативности...",
-        "Греем мандаринки на батарее...",
-        "Заворачиваем настроение в блестящую упаковку...",
+        "%USERNAME% заправляет оленей сказочным топливом...",
+        "%USERNAME% вычисляет радиус улыбки...",
+        "%USERNAME% затягивает санки креативности...",
+        "%USERNAME% греет мандаринки на батарее...",
+        "%USERNAME% заворачивает настроение в блестящую упаковку...",
         "%USERNAME% сервирует праздничный стол...",
         "%USERNAME% генерирует конфетти из приятных слов...",
-        "Наполняем бокал вдохновения...",
-        "Запускаем хоровод из теплых пожеланий...",
-        "Подслащиваем тёплый чай радостью...",
+        "%USERNAME% наполняет бокал вдохновением...",
+        "%USERNAME% запускает хоровод из теплых пожеланий...",
+        "%USERNAME% подслащивает тёплый чай радостью...",
         "%USERNAME% открывает потайной сундук с добрыми словами...",
         "%USERNAME% сортирует искорки волшебства по яркости...",
         "%USERNAME% готовит сани с лета...",
-        "%USERNAME% снял коньки с гвоздя..."
+        "%USERNAME% снял коньки с гвоздя...",
+        "%USERNAME% настраивает частоту новогоднего настроения...",
+        "%USERNAME% синхронизирует биоритмы с курантами...",
+        "%USERNAME% компилирует праздничный код...",
+        "%USERNAME% дефрагментирует новогоднее настроение...",
+        "%USERNAME% калибрует громкость боя курантов...",
+        "%USERNAME% пытается собрать оливье по инструкции...",
+        "%USERNAME% считает пузырьки в шампанском...",
+        "%USERNAME% настраивает резонансную частоту оливье...",
+        "%USERNAME% проводит краш-тест подарочной упаковки...",
+        "%USERNAME% оптимизирует траекторию полета Деда Мороза...",
+        "%USERNAME% тестирует прочность новогодних обещаний...",
+        "%USERNAME% упорядочивает снежинки в сугробе...",
     ];
 
     // Список имён (можно добавить больше)
@@ -663,16 +799,45 @@
     // Инициализируем значение из localStorage
     snowflakeCountElement.textContent = snowflakeCount;
 
+    // Отслеживание активности счетчика снежинок
+    let lastSnowflakeTime = Date.now();
+    let inactivityTimeout;
+    const INACTIVITY_DELAY = 7000; // 7 секунд
+
+    function checkSnowflakeInactivity() {
+        const now = Date.now();
+        if (now - lastSnowflakeTime > INACTIVITY_DELAY) {
+            document.querySelector('.snowflake-counter').classList.add('inactive');
+        }
+    }
+
+    // Обновляем функцию updateSnowflakeCount
     function updateSnowflakeCount() {
         snowflakeCount++;
         snowflakeCountElement.textContent = snowflakeCount;
         // Сохраняем новое значение в localStorage
         localStorage.setItem('snowflakeCount', snowflakeCount.toString());
-        // Анимация
+        
+        // Обновляем время последней активности
+        lastSnowflakeTime = Date.now();
+        
+        // Убираем класс неактивности
+        document.querySelector('.snowflake-counter').classList.remove('inactive');
+        
+        // Сбрасываем и устанавливаем новый таймер неактивности
+        clearTimeout(inactivityTimeout);
+        inactivityTimeout = setTimeout(checkSnowflakeInactivity, INACTIVITY_DELAY);
+        
+        // Анимация счетчика
         snowflakeCountElement.classList.remove('count-pop');
         void snowflakeCountElement.offsetWidth; // Сброс анимации
         snowflakeCountElement.classList.add('count-pop');
     }
+
+    // Запускаем первичную проверку неактивности
+    document.addEventListener('DOMContentLoaded', () => {
+        inactivityTimeout = setTimeout(checkSnowflakeInactivity, INACTIVITY_DELAY);
+    });
 
     function createSnowflake() {
         const snowflake = document.createElement('div');
@@ -757,7 +922,7 @@
     const spinner = document.getElementById('spinner');
     const statusText = document.getElementById('statusText');
     const progressContainer = document.getElementById('progress-container');
-    const accelerateContainer = document.getElementById('accelerate-container');
+    const buttonsContainer = document.getElementById('buttons-container');
 
     // Оверлей
     const overlay = document.getElementById('overlay');
@@ -808,13 +973,13 @@
         spinner.style.display = 'none';
         loadingText.style.display = 'none';
         progressContainer.style.display = 'none';
-        accelerateContainer.style.display = 'none';
+        buttonsContainer.style.display = 'none';
         
         // Убираем прогресс-бар из статусной строки
         document.querySelector('.status-progress-container').style.display = 'none';
         
         // Создаем бегущую строку из имен
-        const marqueeText = usernames.join(' ⭐ ') + ' ⭐ ' + usernames.join(' ⭐ '); // Дублируем имена для непрерывности
+        const marqueeText = usernames.join(' ⭐ ');
         statusText.innerHTML = `<span class="marquee">${marqueeText}</span>`;
         
         startFireworks();
@@ -932,9 +1097,6 @@
         positionArcSymbols(bottomDec, bottomSymbols, 'up');
     }
 
-    // Инициализация гирлянд
-    updateGarlands();
-
     // Обновление при изменении размера окна
     let resizeTimeout;
     window.addEventListener('resize', () => {
@@ -955,6 +1117,18 @@
         return `rgb(${r},${g},${b})`;
     }
 
+    
+    // Увеличение амплитуды гирлянд
+    let garlandAmplitude = 40;
+    function increaseGarlandsBend() {
+        garlandAmplitude += 10;
+        if (garlandAmplitude > 120) garlandAmplitude = 40;
+        updateGarlands();
+    }
+
+    // Инициализация гирлянд
+    updateGarlands();
+
     // Располагаем символы дугой
     function positionArcSymbols(container, symbols, arcDirection='down') {
         // arcDirection = 'down' для верхней дуги, 'up' для нижней
@@ -969,9 +1143,7 @@
         const count = symbols.length;
         const containerWidth = window.innerWidth;
         // Базовый уровень и амплитуда дуги
-        let baseY, amplitude;
-        baseY = 0;
-        amplitude = 40;
+        let baseY = 0;
 
         // Количество дуг (нечётное число)
         const numArcs = 5;
@@ -990,9 +1162,9 @@
 
             let topPos;
             if (arcDirection === 'down') {
-                topPos = baseY + amplitude * sineVal;
+                topPos = baseY + garlandAmplitude * sineVal;
             } else {
-                topPos = baseY - amplitude * sineVal;
+                topPos = baseY - garlandAmplitude * sineVal;
             }
 
             const segmentWidth = containerWidth / numArcs;
@@ -1034,6 +1206,147 @@
     snowflakeCounter.addEventListener('mouseleave', () => {
         resetButton.style.display = 'none';
     });
+
+    // Функция для блокировки/разблокировки кнопки
+    function toggleButtonState(button, duration) {
+        button.disabled = true;
+        setTimeout(() => {
+            button.disabled = false;
+        }, duration);
+    }
+
+    document.getElementById('jumpBtn').addEventListener('click', (e) => {
+        const button = e.target;
+        toggleButtonState(button, 2000);
+
+        const elements = document.querySelectorAll('.progress-container, .loading-text, .spinner');
+        elements.forEach(element => {
+            element.style.animation = 'bounce 0.5s ease infinite';
+            setTimeout(() => {
+                element.style.animation = '';
+            }, 2000);
+        });
+    });
+
+    // Функция самоуничтожения кнопки
+    function selfDestruct(button) {
+        const rect = button.getBoundingClientRect();
+        const explosion = document.createElement('div');
+        explosion.classList.add('explosion');
+        explosion.style.left = (rect.left + rect.width/2) + 'px';
+        explosion.style.top = (rect.top + rect.height/2) + 'px';
+        document.body.appendChild(explosion);
+        
+        button.style.animation = 'fadeOut 0.5s forwards';
+        setTimeout(() => {
+            button.remove();
+            explosion.remove();
+        }, 500);
+    }
+
+    // Функция добавления звёзд
+    function addMoreStars() {
+        for (let i = 0; i < 20; i++) {
+            createStar();
+        }
+    }
+
+    // Функция массового создания снежинок
+    function spawnSnowflakes() {
+        for (let i = 0; i < 20; i++) {
+            setTimeout(() => createSnowflake(), i * 50);
+        }
+    }
+
+    // Реверс спиннера
+    let isSpinnerReversed = false;
+    function reverseSpinner() {
+        const spinner = document.getElementById('spinner');
+        isSpinnerReversed = !isSpinnerReversed;
+        
+        if (isSpinnerReversed) {
+            spinner.style.animation = 'spinReverse 1s linear infinite';
+        } else {
+            spinner.style.animation = 'spin 1s linear infinite';
+        }
+
+        // change spinner size to random
+        spinner.style.width = Math.random() * 100 + 50 + 'px';
+        spinner.style.height = spinner.style.width;
+        
+        // change spinner border width to random
+        spinner.style.borderWidth = Math.random() * 10 + 5 + 'px';
+
+        // change spinner color to random
+        spinner.style.borderColor = `#${Math.floor(Math.random()*16777215).toString(16)}`;
+        spinner.style.color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
+
+        // change spinner border style to random
+        spinner.style.borderStyle = ['solid', 'dashed', 'dotted', 'double', 'groove', 'ridge', 'inset', 'outset'][Math.floor(Math.random() * 8)];
+
+        // change spinner animation timing function to random
+        spinner.style.animationTimingFunction = ['ease', 'ease-in', 'ease-out', 'ease-in-out', 'linear', 'cubic-bezier(0.1, 0.7, 0.1, 1)', 'cubic-bezier(0.8, 0, 0.2, 1)', 'cubic-bezier(0.2, 0, 0.8, 1)'][Math.floor(Math.random() * 8)];
+    }
+
+    // Инициализация обработчиков событий
+    document.addEventListener('DOMContentLoaded', function() {
+        // Существующие обработчики
+        const accelerateBtn = document.getElementById('accelerateBtn');
+        const accelerateBtn2 = document.getElementById('accelerateBtn2');
+        const changeColorBtn = document.getElementById('changeColorBtn');
+        const jumpBtn = document.getElementById('jumpBtn');
+        
+        // Новые обработчики
+        const selfDestructBtn = document.getElementById('selfDestructBtn');
+        const addStarsBtn = document.getElementById('addStarsBtn');
+        const spawnSnowflakesBtn = document.getElementById('spawnSnowflakesBtn');
+        const bendGarlandsBtn = document.getElementById('bendGarlandsBtn');
+        const reverseSpinnerBtn = document.getElementById('reverseSpinnerBtn');
+
+        // Добавляем обработчики для новых кнопок
+        selfDestructBtn.addEventListener('click', function() {
+            selfDestruct(this);
+        });
+
+        addStarsBtn.addEventListener('click', addMoreStars);
+        spawnSnowflakesBtn.addEventListener('click', spawnSnowflakes);
+        bendGarlandsBtn.addEventListener('click', increaseGarlandsBend);
+        reverseSpinnerBtn.addEventListener('click', reverseSpinner);
+    });
+
+    // Функция для перемешивания массива (алгоритм Фишера-Йетса)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    // Функция для перемешивания и скрытия кнопок
+    function randomizeButtons() {
+        const buttonsContainer = document.getElementById('buttons-container');
+        const buttons = Array.from(buttonsContainer.children);
+        
+        // Перемешиваем кнопки
+        const shuffledButtons = shuffleArray(buttons);
+        
+        // Определяем количество кнопок для скрытия (треть от общего количества)
+        const hideCount = Math.floor(buttons.length / 3);
+        
+        // Скрываем случайные кнопки и переставляем все кнопки в случайном порядке
+        shuffledButtons.forEach((button, index) => {
+            // Скрываем первую треть кнопок после перемешивания
+            if (index < hideCount) {
+                button.style.display = 'none';
+            }
+            // Перемещаем кнопку в конец контейнера (это изменит порядок)
+            buttonsContainer.appendChild(button);
+        });
+    }
+
+    // Вызываем функцию при загрузке страницы
+    document.addEventListener('DOMContentLoaded', randomizeButtons);
 
 </script>
 </body>
