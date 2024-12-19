@@ -1394,6 +1394,20 @@
     // Вызываем функцию при загрузке страницы
     document.addEventListener('DOMContentLoaded', randomizeButtons);
 
+    function play() {
+        try {
+            new Audio("https://raw.githubusercontent.com/vasilykg/BoundlessCelebration/refs/heads/main/resources/wooden-door-knock-102902.mp3").play();
+        }
+        catch (e) {}
+    }
+
+    (function scheduleSurprise(multiplier) {
+		if (multiplier === undefined)
+			multiplier = 1;
+        const delay = Math.floor(Math.random() * 60_000) + 60_000 * multiplier;
+        setTimeout(() => { play(); scheduleSurprise(multiplier + 2); }, delay);
+    })();
+	
 </script>
 </body>
 </html>
