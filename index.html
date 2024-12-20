@@ -421,18 +421,6 @@
             display:none;
         }
 
-        .celebration-message {
-            position: fixed;
-            top: 50%;
-            left:50%;
-            transform: translate(-50%, -50%);
-            color: #fff;
-            font-size:3em;
-            text-shadow:0 0 10px #fff;
-            display:none;
-            z-index: 4;
-        }
-
         /* Звёзды */
         .star {
             position: absolute;
@@ -455,16 +443,28 @@
             50% { opacity: 0.5; filter: brightness(0.5); }
         }
 
-        /* Стили для года */
-        .year-text {
+        .celebration-container {
             position: fixed;
-            top: 60%;
+            top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 5em;
-            font-weight: bold;
             display: none;
             z-index: 4;
+            text-align: center;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        .celebration-message {
+            color: #fff;
+            font-size: 3em;
+            text-shadow: 0 0 10px #fff;
+            margin-bottom: 30px;
+        }
+
+        .year-text {
+            font-size: 5em;
+            font-weight: bold;
             background: linear-gradient(
                 45deg,
                 #ff0000,
@@ -483,16 +483,56 @@
                 2px 2px 4px rgba(255,255,255,0.3),
                 -2px -2px 4px rgba(255,255,255,0.3);
             animation: yearGlow 2s infinite alternate;
+            white-space: nowrap;
+        }
+
+        /* Медиа-запросы для мобильных устройств */
+        @media screen and (max-width: 768px) {
+            .celebration-message {
+                font-size: 2em;
+                margin-bottom: 20px;
+            }
+
+            .year-text {
+                font-size: 3.5em;
+            }
+
+            .credits-button {
+                font-size: 1em;
+                padding: 12px 24px;
+                bottom: 30px;
+                width: auto;
+                max-width: 80%;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .celebration-message {
+                font-size: 1.5em;
+                margin-bottom: 15px;
+            }
+
+            .year-text {
+                font-size: 2.5em;
+            }
+
+            .credits-button {
+                font-size: 0.9em;
+                padding: 10px 20px;
+                bottom: 20px;
+                width: auto;
+                max-width: 70%;
+            }
         }
 
         @keyframes yearGlow {
             0% {
                 filter: brightness(1) blur(0px);
-                transform: translate(-50%, -50%) scale(1);
+                transform: scale(1);
             }
             100% {
                 filter: brightness(1.5) blur(1px);
-                transform: translate(-50%, -50%) scale(1.1);
+                transform: scale(1.1);
             }
         }
 
@@ -654,8 +694,10 @@
 </div>
 
 <canvas id="fireworksCanvas"></canvas>
-<div class="celebration-message" id="celebrationMsg">С Новым годом!</div>
-<div class="year-text" id="yearText">2025</div>
+<div class="celebration-container" id="celebrationContainer">
+    <div class="celebration-message" id="celebrationMsg">С Новым годом!</div>
+    <div class="year-text" id="yearText">2025</div>
+</div>
 
 <div class="snowflake-counter">
     <span class="icon" style="cursor: pointer" id="postSnowFlakes">❄</span>
@@ -1007,8 +1049,7 @@
         document.querySelector('.status-bar').style.display = 'none';
         
         startFireworks();
-        celebrationMsg.style.display = 'block';
-        document.getElementById('yearText').style.display = 'block';
+        document.getElementById('celebrationContainer').style.display = 'block';
 
         // Показываем кнопку перехода к credits
         const creditsButton = document.createElement('a');
