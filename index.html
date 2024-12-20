@@ -272,21 +272,43 @@
             text-overflow: ellipsis;
         }
 
-        .status-progress-container {
+        .volume-control {
             width: 200px;
-            background: rgba(255,255,255,0.2);
-            height: 6px;
-            border-radius: 3px;
-            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             margin-left: 10px;
-            position: relative;
         }
 
-        .status-progress-bar {
-            height: 100%;
-            background: #ffeb3b;
-            width: 0;
-            transition: width linear;
+        .volume-control input[type="range"] {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255,255,255,0.2);
+            outline: none;
+        }
+
+        .volume-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #feda4a;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .volume-control input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 10px rgba(254, 218, 74, 0.5);
+        }
+
+        .volume-control .volume-icon {
+            font-size: 1.2em;
+            cursor: pointer;
+            color: #feda4a;
+            text-shadow: 0 0 5px rgba(254, 218, 74, 0.5);
         }
 
         /* Счётчик снежинок */
@@ -652,6 +674,71 @@
             transform: translateX(-50%) scale(1.1);
             box-shadow: 0 0 20px rgba(254, 218, 74, 0.5);
         }
+
+        .welcome-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #001833 0%, #000B1A 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .welcome-text {
+            color: #feda4a;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            text-shadow: 0 0 10px rgba(254, 218, 74, 0.5);
+            max-width: 800px;
+            line-height: 1.4;
+        }
+
+        .start-button {
+            padding: 20px 40px;
+            font-size: 1.5em;
+            background: linear-gradient(45deg, #feda4a, #FF8E00);
+            color: #000;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .start-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(254, 218, 74, 0.5);
+        }
+
+        @media screen and (max-width: 768px) {
+            .welcome-text {
+                font-size: 2em;
+            }
+            .start-button {
+                font-size: 1.2em;
+                padding: 15px 30px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .welcome-text {
+                font-size: 1.5em;
+            }
+            .start-button {
+                font-size: 1em;
+                padding: 12px 24px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -680,8 +767,9 @@
 
 <div class="status-bar">
     <div class="status-text" id="statusText">Подождите, поздравление загружается...</div>
-    <div class="status-progress-container">
-        <div class="status-progress-bar" id="statusProgress"></div>
+    <div class="volume-control">
+        <span class="volume-icon" id="volumeIcon">🔊</span>
+        <input type="range" id="volumeSlider" min="0" max="100" value="10">
     </div>
 </div>
 
@@ -704,9 +792,22 @@
     <span class="count" id="snowflakeCount">0</span>
 </div>
 
+<div class="welcome-overlay" id="welcomeOverlay">
+    <div class="welcome-text"><h1>Внимание!</h1><br>
+        Вы собираетесь запустить самое невероятное новогоднее поздравление в истории человечества!<br>
+        Приготовьтесь к незабываемому путешествию в мир праздничного волшебства!
+    </div>
+    <button class="start-button" id="startButton">Поздравляйте меня!</button>
+</div>
+
+<audio id="welcomeMusic" preload="auto">
+    <source src="resources/nggyu.mp3" type="audio/mpeg">
+</audio>
+
 <script>
     let MAX_TIME = 5 * 60 * 1000; // 5 минут
-    const startTime = Date.now();
+    let startTime; // Убираем инициализацию startTime здесь
+    let mainProgressInterval; // Добавляем переменную для хранения интервала
 
     // Список фраз для нижнего статус-бара
     const phrases = [
@@ -730,7 +831,7 @@
         "%USERNAME% открывает потайной сундук с добрыми словами...",
         "%USERNAME% сортирует искорки волшебства по яркости...",
         "%USERNAME% готовит сани с лета...",
-        "%USERNAME% снял коньки с гвоздя...",
+        "%USERNAME% снимает коньки с гвоздя...",
         "%USERNAME% настраивает частоту новогоднего настроения...",
         "%USERNAME% синхронизирует биоритмы с курантами...",
         "%USERNAME% компилирует праздничный код...",
@@ -824,44 +925,8 @@
             return;
         }
     }
-    const mainProgressInterval = setInterval(updateMainProgress, 200);
 
     const loadingText = document.getElementById('loading-text');
-    const statusProgress = document.getElementById('statusProgress');
-
-    function updateStatus() {
-        const now = Date.now();
-        if (now - startTime > MAX_TIME) {
-            return;
-        }
-
-        // Выбираем рандомное время обновления от 3 до 5 сек
-        const nextDelay = 3000 + Math.random() * 2000;
-
-        let phrase = getRandomElement(phrases);
-        let currentUsername = getRandomElement(usernames);
-        phrase = phrase.replace('%USERNAME%', currentUsername);
-        loadingText.textContent = phrase;
-
-        // Сброс прогресса до 0%
-        statusProgress.style.transition = 'none';
-        statusProgress.style.width = '0%';
-
-        // Чтобы применился сброс, перерисуем
-        requestAnimationFrame(() => {
-            // Теперь устанавливаем продолжительность анимации равную nextDelay
-            statusProgress.style.transition = `width ${nextDelay}ms linear`;
-            // И запускаем "заполнение"
-            requestAnimationFrame(() => {
-                statusProgress.style.width = '100%';
-            });
-        });
-
-        // Планируем следующее обновление статуса
-        setTimeout(updateStatus, nextDelay);
-    }
-
-    updateStatus();
 
     // Счётчик снежинок
     let snowflakeCount = parseInt(localStorage.getItem('snowflakeCount') || '0');
@@ -1464,6 +1529,87 @@
         setTimeout(() => { play(); scheduleSurprise(multiplier + 2); }, delay);
     })();
 	
+    document.addEventListener('DOMContentLoaded', function() {
+        const welcomeOverlay = document.getElementById('welcomeOverlay');
+        const startButton = document.getElementById('startButton');
+        const welcomeMusic = document.getElementById('welcomeMusic');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const volumeIcon = document.getElementById('volumeIcon');
+        const mainContent = document.querySelector('body');
+
+        // Создаем звезды сразу при загрузке
+        createInitialStars(welcomeOverlay);
+
+        // Настройка управления звуком
+        welcomeMusic.volume = volumeSlider.value / 100;
+        
+        volumeSlider.addEventListener('input', (e) => {
+            const volume = e.target.value / 100;
+            welcomeMusic.volume = volume;
+            // Обновляем иконку в зависимости от громкости
+            volumeIcon.textContent = volume === 0 ? '🔇' : volume < 0.5 ? '🔉' : '🔊';
+        });
+
+        volumeIcon.addEventListener('click', () => {
+            if (welcomeMusic.volume > 0) {
+                welcomeMusic.volume = 0;
+                volumeSlider.value = 0;
+                volumeIcon.textContent = '🔇';
+            } else {
+                welcomeMusic.volume = 0.5;
+                volumeSlider.value = 50;
+                volumeIcon.textContent = '🔊';
+            }
+        });
+
+        // Скрываем все элементы кроме welcome overlay и звезд
+        Array.from(mainContent.children).forEach(child => {
+            if (child !== welcomeOverlay && !child.classList.contains('star')) {
+                child.style.display = 'none';
+            }
+        });
+
+        startButton.addEventListener('click', function() {
+            // Инициализируем startTime при нажатии на кнопку
+            startTime = Date.now();
+            welcomeMusic.loop = true;
+            
+            // Воспроизводим музыку
+            welcomeMusic.play().catch(error => {
+                console.log('Автовоспроизведение заблокировано браузером');
+            });
+
+            // Скрываем приветственный оверлей
+            welcomeOverlay.style.display = 'none';
+
+            // Показываем основной контент
+            Array.from(mainContent.children).forEach(child => {
+                if (child !== welcomeOverlay) {
+                    child.style.removeProperty('display');
+                }
+            });
+            
+            // Запускаем прогресс-бар
+            mainProgressInterval = setInterval(updateMainProgress, 200);
+
+            createInitialStars(mainContent);
+        });
+    });
+
+    // В начале скрипта добавляем:
+    function createInitialStars(container) {
+        const numberOfStars = 200;
+
+        for (let i = 0; i < numberOfStars; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.animationDelay = `${Math.random() * 2}s`;
+            container.appendChild(star);
+        }
+    }
+
 </script>
 </body>
 </html>
