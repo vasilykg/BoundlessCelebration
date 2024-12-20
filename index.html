@@ -390,50 +390,6 @@
             100% {transform: scale(3); opacity:0;}
         }
 
-        /* Оверлей по истечении N минут */
-        .overlay {
-            position: fixed;
-            top:0; left:0;
-            width:100%; height:100%;
-            background: rgba(0,0,0,0.8);
-            color:#fff;
-            flex-direction: column;
-            justify-content: center;
-            align-items:center;
-            text-align:center;
-            z-index:999;
-            padding:20px;
-            box-sizing:border-box;
-            display:none;
-        }
-
-        .overlay h1 {
-            margin-bottom:20px;
-        }
-
-        .overlay button {
-            margin:10px;
-            padding:10px 20px;
-            background:#fff;
-            color:#000;
-            border:none;
-            cursor:pointer;
-            font-size:1em;
-            border-radius:10px;
-        }
-
-        .overlay button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        .overlay button.timer::after {
-            content: attr(data-time);
-            margin-left: 5px;
-            font-size: 0.9em;
-            color: #666;
-        }
-
         /* Контейнер для фейерверков */
         #fireworksCanvas {
             position: fixed;
@@ -675,14 +631,14 @@
             box-shadow: 0 0 20px rgba(254, 218, 74, 0.5);
         }
 
-        .welcome-overlay {
+        .overlayContainer {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background: linear-gradient(135deg, #001833 0%, #000B1A 100%);
-            display: flex;
+            display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
@@ -692,16 +648,16 @@
             box-sizing: border-box;
         }
 
-        .welcome-text {
+        .overlayText {
             color: #feda4a;
             font-size: 2.5em;
             margin-bottom: 40px;
             text-shadow: 0 0 10px rgba(254, 218, 74, 0.5);
-            max-width: 800px;
+            max-width: 80%;
             line-height: 1.4;
         }
 
-        .start-button {
+        .overlayButton {
             padding: 20px 40px;
             font-size: 1.5em;
             background: linear-gradient(45deg, #feda4a, #FF8E00);
@@ -715,29 +671,58 @@
             letter-spacing: 2px;
         }
 
-        .start-button:hover {
+        .overlayButton:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .overlayButton.timer::after {
+            content: attr(data-time);
+            margin-left: 5px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .overlayButton:hover {
             transform: scale(1.1);
             box-shadow: 0 0 30px rgba(254, 218, 74, 0.5);
         }
 
         @media screen and (max-width: 768px) {
-            .welcome-text {
+            .overlayText {
                 font-size: 2em;
             }
-            .start-button {
+            .overlayButton {
                 font-size: 1.2em;
                 padding: 15px 30px;
             }
         }
 
         @media screen and (max-width: 480px) {
-            .welcome-text {
+            .overlayText {
                 font-size: 1.5em;
             }
-            .start-button {
+            .overlayButton {
                 font-size: 1em;
                 padding: 12px 24px;
             }
+        }
+
+        .custom-button.disabled {
+            background: linear-gradient(45deg, #808080, #606060);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .custom-button .countdown {
+            font-size: 0.8em;
+            margin-top: 5px;
+            color: #feda4a;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
@@ -773,11 +758,15 @@
     </div>
 </div>
 
-<div class="overlay" id="overlay">
-    <h1>Слишком много поздравлений! Загрузить не получилось.</h1>
+<div class="overlayContainer" id="overlay">
+    <div class="overlayText">
+        <h1>Внимание!</h1>
+        <h2>Ваше идеальное новогоднее поздравление, созданное с использованием передовых технологий и уникального подхода, готово к просмотру!</h2>
+        <h3>Настал момент истины!</h3>
+        <h3>Позвольте представить вам наше величайшее творение!</h3>
+    </div>
     <div>
-        <button id="reloadBtn">Попробовать ещё раз</button>
-        <button id="celebrateBtn">Всё равно порадоваться</button>
+        <button id="celebrateBtn" class="overlayButton">Наконец-то! Поздравляйте меня!</button>
     </div>
 </div>
 
@@ -792,12 +781,12 @@
     <span class="count" id="snowflakeCount">0</span>
 </div>
 
-<div class="welcome-overlay" id="welcomeOverlay">
-    <div class="welcome-text"><h1>Внимание!</h1><br>
+<div class="overlayContainer" id="welcomeOverlay" style="display: flex;">
+    <div class="overlayText"><h1>Внимание!</h1><br>
         Вы собираетесь запустить самое невероятное новогоднее поздравление в истории человечества!<br>
         Приготовьтесь к незабываемому путешествию в мир праздничного волшебства!
     </div>
-    <button class="start-button" id="startButton">Поздравляйте меня!</button>
+    <button class="overlayButton" id="startButton">Поздравляйте меня!</button>
 </div>
 
 <audio id="welcomeMusic" preload="auto">
@@ -908,19 +897,26 @@
         let now = Date.now();
         let elapsedTime = now - startTime;
         
-        // Рассчитываем прогресс на основе прошедшего времени
+        // Рассчитываем прогресс на основе логарифмической кривой
         let timeRatio = elapsedTime / MAX_TIME;
         if (timeRatio > 1) timeRatio = 1;
-        let progress = 99 * (1 - Math.pow(1 - timeRatio, 20));
+        
+        // Используем логарифмическую функцию для более плавного замедления
+        // log(x + 1) даёт нам кривую, которая быстро растёт вначале и замедляется к концу
+        // Делим на log(2), чтобы нормализовать значение от 0 до 1
+        let progress = Math.log(timeRatio * 9 + 1) / Math.log(10) * 99;
         
         // Убеждаемся, что не превысим 99%
         if (progress > 99) progress = 99;
+        
         bar.style.width = progress + '%';
         percText.textContent = Math.floor(progress) + '%';
         
         if (elapsedTime > MAX_TIME) {
             // Показываем оверлей
-            document.getElementById('overlay').style.display = 'flex';
+            const overlay = document.getElementById('overlay');
+            overlay.style.display = 'flex';
+            createInitialStars(overlay);
             clearInterval(mainProgressInterval);
             return;
         }
@@ -1061,14 +1057,9 @@
 
     // Оверлей
     const overlay = document.getElementById('overlay');
-    const reloadBtn = document.getElementById('reloadBtn');
     const celebrateBtn = document.getElementById('celebrateBtn');
     const fireworksCanvas = document.getElementById('fireworksCanvas');
     const celebrationMsg = document.getElementById('celebrationMsg');
-
-    reloadBtn.addEventListener('click', () => {
-        location.reload();
-    });
 
     // Функция для обработки таймера на кнопке
     function startCelebrateBtnTimer() {
@@ -1501,15 +1492,54 @@
         // Определяем количество кнопок для скрытия (треть от общего количества)
         const hideCount = Math.floor(buttons.length / 3);
         
+        // Проверяем, будет ли скрыта accelerateBtn2
+        const accelerateBtn2 = document.getElementById('accelerateBtn2');
+        let wasAccelerateBtn2Hidden = false;
+        
         // Скрываем случайные кнопки и переставляем все кнопки в случайном порядке
         shuffledButtons.forEach((button, index) => {
             // Скрываем первую треть кнопок после перемешивания
             if (index < hideCount) {
                 button.style.display = 'none';
+                if (button === accelerateBtn2) {
+                    wasAccelerateBtn2Hidden = true;
+                }
             }
             // Перемещаем кнопку в конец контейнера (это изменит порядок)
             buttonsContainer.appendChild(button);
         });
+
+        // Если accelerateBtn2 была скрыта, создаем временную кнопку
+        if (wasAccelerateBtn2Hidden) {
+            const tempButton = document.createElement('button');
+            tempButton.className = 'custom-button blue-gradient disabled';
+            tempButton.id = 'tempAccelerateBtn2';
+            tempButton.innerHTML = 'Кнопка ещё разрабатывается <span class="countdown">60</span>';
+            tempButton.disabled = true;
+            buttonsContainer.appendChild(tempButton);
+
+            // Запускаем таймер обратного отсчета
+            let timeLeft = 60;
+            const countdownElement = tempButton.querySelector('.countdown');
+            
+            const countdownInterval = setInterval(() => {
+                timeLeft--;
+                countdownElement.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    // Плавно скрываем временную кнопку
+                    tempButton.style.animation = 'fadeOut 0.5s forwards';
+                    
+                    setTimeout(() => {
+                        tempButton.remove();
+                        // Показываем оригинальную кнопку
+                        accelerateBtn2.style.display = '';
+                        accelerateBtn2.style.animation = 'fadeIn 0.5s ease-out';
+                    }, 500);
+                }
+            }, 1000);
+        }
     }
 
     // Вызываем функцию при загрузке страницы
@@ -1609,7 +1639,6 @@
             container.appendChild(star);
         }
     }
-
 </script>
 </body>
 </html>
