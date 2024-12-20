@@ -455,19 +455,6 @@
             50% { opacity: 0.5; filter: brightness(0.5); }
         }
 
-        /* Стиль для бегущей строки */
-        .marquee {
-            display: inline-block;
-            animation: marquee 35s linear infinite;
-            white-space: nowrap;
-            padding-left: 100%;
-        }
-
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-100%); }
-        }
-
         /* Стили для года */
         .year-text {
             position: fixed;
@@ -600,6 +587,30 @@
             z-index: 10;
             box-shadow: 0 0 10px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
+        }
+
+        .credits-button {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background: linear-gradient(45deg, #feda4a, #FF8E00);
+            color: #000;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: none;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .credits-button:hover {
+            transform: translateX(-50%) scale(1.1);
+            box-shadow: 0 0 20px rgba(254, 218, 74, 0.5);
         }
     </style>
 </head>
@@ -992,16 +1003,20 @@
         progressContainer.style.display = 'none';
         buttonsContainer.style.display = 'none';
         
-        // Убираем прогресс-бар из статусной строки
-        document.querySelector('.status-progress-container').style.display = 'none';
-        
-        // Создаем бегущую строку из имен
-        const marqueeText = usernames.join(' ⭐ ');
-        statusText.innerHTML = `<span class="marquee">${marqueeText}</span>`;
+        // Убираем статус-бар полностью
+        document.querySelector('.status-bar').style.display = 'none';
         
         startFireworks();
         celebrationMsg.style.display = 'block';
-            document.getElementById('yearText').style.display = 'block';
+        document.getElementById('yearText').style.display = 'block';
+
+        // Показываем кнопку перехода к credits
+        const creditsButton = document.createElement('a');
+        creditsButton.href = 'credits.html';
+        creditsButton.className = 'credits-button';
+        creditsButton.textContent = 'Посмотреть титры';
+        document.body.appendChild(creditsButton);
+        creditsButton.style.display = 'block';
     });
 
     // Фейерверки
