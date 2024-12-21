@@ -1,0 +1,71 @@
+<svg
+        width="64"
+        height="64"
+        viewBox="0 0 64 64"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-labelledby="title"
+        role="img"
+>
+    <title id="title">Новогодняя иконка</title>
+
+    <!-- Сама ёлка (треугольник) -->
+    <polygon
+            points="32,12 52,52 12,52"
+            fill="#2E8B57"
+    />
+
+    <!-- Звезда на макушке ёлки -->
+    <path
+            d="M32 4
+       L34.9 10.7
+       L42 11.6
+       L36 16.4
+       L37.8 23.3
+       L32 19.6
+       L26.2 23.3
+       L28 16.4
+       L22 11.6
+       L29.1 10.7
+       Z"
+            fill="#FFD700"
+    />
+
+    <!-- Ствол ёлки -->
+    <rect
+            x="28"
+            y="52"
+            width="8"
+            height="8"
+            fill="#8B4513"
+    />
+
+    <!-- Ёлочные шары -->
+    <circle cx="32"
+            cy="26"
+            r="2"
+            fill="#FF0000"
+    />
+    <circle
+            cx="24"
+            cy="38"
+            r="2"
+            fill="#FFFF00"
+    />
+    <circle
+            cx="40"
+            cy="38"
+            r="2"
+            fill="#0000FF"
+    />
+    <circle
+            cx="24"
+            cy="48"
+            r="2"
+            fill="#FF00FF"/>
+    <circle cx="40" cy="48" r="2" fill="#00FFFF"/>
+    <circle cx="32" cy="34" r="2" fill="#FFA500"/>
+    <circle cx="32" cy="44" r="2" fill="#00FF00"/>
+
+
+</svg>
