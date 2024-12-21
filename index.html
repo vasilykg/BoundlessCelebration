@@ -644,31 +644,49 @@
             align-items: center;
             z-index: 9999;
             text-align: center;
-            padding: 20px;
+            padding: min(5vh, 20px);
             box-sizing: border-box;
+            overflow: hidden;
         }
 
         .overlayText {
             color: #feda4a;
-            font-size: 2.5em;
-            margin-bottom: 40px;
+            font-size: clamp(1rem, 5vmin, 2.5rem);
+            margin-bottom: min(5vh, 40px);
             text-shadow: 0 0 10px rgba(254, 218, 74, 0.5);
-            max-width: 80%;
+            width: 90%;
             line-height: 1.4;
         }
 
+        .overlayText h1 {
+            font-size: clamp(1.5rem, 7vmin, 3rem);
+            margin: 0 0 min(3vh, 20px) 0;
+        }
+
+        .overlayText h2 {
+            font-size: clamp(1.2rem, 6vmin, 2.5rem);
+            margin: 0 0 min(2vh, 15px) 0;
+        }
+
+        .overlayText h3 {
+            font-size: clamp(1rem, 5vmin, 2rem);
+            margin: 0 0 min(2vh, 15px) 0;
+        }
+
         .overlayButton {
-            padding: 20px 40px;
-            font-size: 1.5em;
+            padding: min(3vh, 20px) min(6vh, 40px);
+            font-size: clamp(1rem, 4vmin, 1.5rem);
             background: linear-gradient(45deg, #feda4a, #FF8E00);
             color: #000;
             border: none;
-            border-radius: 30px;
+            border-radius: min(4vh, 30px);
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
             font-weight: bold;
             letter-spacing: 2px;
+            /* margin-top: auto; */
+            /* white-space: nowrap; */
         }
 
         .overlayButton:disabled {
@@ -683,29 +701,9 @@
             color: #666;
         }
 
-        .overlayButton:hover {
+        .overlayButton:hover:not(:disabled) {
             transform: scale(1.1);
             box-shadow: 0 0 30px rgba(254, 218, 74, 0.5);
-        }
-
-        @media screen and (max-width: 768px) {
-            .overlayText {
-                font-size: 2em;
-            }
-            .overlayButton {
-                font-size: 1.2em;
-                padding: 15px 30px;
-            }
-        }
-
-        @media screen and (max-width: 480px) {
-            .overlayText {
-                font-size: 1.5em;
-            }
-            .overlayButton {
-                font-size: 1em;
-                padding: 12px 24px;
-            }
         }
 
         .custom-button.disabled {
@@ -1000,8 +998,6 @@
         }, duration * 1000);
     }
 
-    setInterval(createSnowflake, 300);
-
     // Звезды - большее количество
     function createStar() {
         const star = document.createElement('div');
@@ -1017,11 +1013,6 @@
             if (star.parentNode) star.remove();
         }, 15000);
     }
-
-    for (let i=0; i<200; i++) {
-        createStar();
-    }
-    setInterval(createStar, 1500);
 
     // Кнопка ускорения
     const accelerateBtn = document.getElementById('accelerateBtn');
@@ -1542,9 +1533,6 @@
         }
     }
 
-    // Вызываем функцию при загрузке страницы
-    document.addEventListener('DOMContentLoaded', randomizeButtons);
-
     function play() {
         try {
             new Audio("https://raw.githubusercontent.com/vasilykg/BoundlessCelebration/refs/heads/main/resources/wooden-door-knock-102902.mp3").play();
@@ -1608,6 +1596,14 @@
             welcomeMusic.play().catch(error => {
                 console.log('Автовоспроизведение заблокировано браузером');
             });
+
+            randomizeButtons();
+            setInterval(createSnowflake, 300);
+            
+            for (let i=0; i<200; i++) {
+                createStar();
+            }
+            setInterval(createStar, 1500);
 
             // Скрываем приветственный оверлей
             welcomeOverlay.style.display = 'none';
