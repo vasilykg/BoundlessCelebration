@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Загрузка поздравления</title>
+    <title>Идеальное поздравление</title>
+    <link rel="icon" href="resources/icon.svg" type="image/svg+xml">
     <!-- Yandex.Metrika counter -->
     <script type="text/javascript" >
         (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -126,19 +127,19 @@
         .progress-bar-blue {
             height: 100%;
             background: linear-gradient(to right, #005afd, #293081);
-            width: 0%;
+            width: 0;
             transition: width 0.2s;
         }
         .progress-bar-yellow {
             height: 100%;
             background: linear-gradient(to right, #ffeb00, #978329);
-            width: 0%;
+            width: 0;
             transition: width 0.2s;
         }
         .progress-bar-red {
             height: 100%;
             background: linear-gradient(to right, #ea0505, #812f30);
-            width: 0%;
+            width: 0;
             transition: width 0.2s;
         }
 
@@ -588,25 +589,6 @@
             animation: pulseRed 0.5s ease-in-out infinite;
         }
 
-        /* Обновите стили для плавного перехода */
-        .snowflake-counter {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(5px);
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 1.2em;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 10;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-        }
-
         .credits-button {
             position: fixed;
             bottom: 40px;
@@ -685,8 +667,6 @@
             text-transform: uppercase;
             font-weight: bold;
             letter-spacing: 2px;
-            /* margin-top: auto; */
-            /* white-space: nowrap; */
         }
 
         .overlayButton:disabled {
@@ -921,6 +901,23 @@
     }
 
     const loadingText = document.getElementById('loading-text');
+    function updateLoadingText() {
+        const now = Date.now();
+        if (now - startTime > MAX_TIME) {
+            return;
+        }
+
+        // Выбираем рандомное время обновления от 3 до 5 сек
+        const nextDelay = 3000 + Math.random() * 2000;
+
+        let phrase = getRandomElement(phrases);
+        let currentUsername = getRandomElement(usernames);
+        phrase = phrase.replace('%USERNAME%', currentUsername);
+        loadingText.textContent = phrase;
+
+        // Планируем следующее обновление статуса
+        setTimeout(updateLoadingText, nextDelay);
+    }
 
     // Счётчик снежинок
     let snowflakeCount = parseInt(localStorage.getItem('snowflakeCount') || '0');
@@ -1604,6 +1601,8 @@
                 createStar();
             }
             setInterval(createStar, 1500);
+
+            updateLoadingText();
 
             // Скрываем приветственный оверлей
             welcomeOverlay.style.display = 'none';
