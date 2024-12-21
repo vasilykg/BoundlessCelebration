@@ -702,6 +702,291 @@
             from { opacity: 0; transform: scale(0.8); }
             to { opacity: 1; transform: scale(1); }
         }
+
+        .leaderboard {
+            position: fixed;
+            right: 20px;
+            top: 80px;
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.3), rgba(0, 100, 0, 0.3));
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            width: 300px;
+            transition: transform 0.3s ease;
+            z-index: 100;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+        }
+
+        .leaderboard.collapsed {
+            transform: translateX(calc(100% - 40px));
+        }
+
+        @media (max-width: 768px) {
+            .leaderboard {
+                right: 0;
+                left: 50%;
+                width: 90%;
+                max-width: 300px;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+
+            .leaderboard.collapsed {
+                left: auto;
+                right: 0;
+                transform: translateX(calc(100% - 40px));
+            }
+
+            .leaderboard:not(.collapsed) {
+                transform: translate(-50%, 0);
+            }
+
+            .leaderboard:not(.collapsed) .leaderboard-toggle {
+                left: 10px;
+            }
+
+            /* Стилизация скроллбара */
+            .leaderboard::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            .leaderboard::-webkit-scrollbar-track {
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 4px;
+            }
+
+            .leaderboard::-webkit-scrollbar-thumb {
+                background: rgba(255, 215, 0, 0.5);
+                border-radius: 4px;
+            }
+
+            .leaderboard::-webkit-scrollbar-thumb:hover {
+                background: rgba(255, 215, 0, 0.7);
+            }
+        }
+
+        .leaderboard-toggle {
+            position: absolute;
+            left: 10px;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0);
+            border: none;
+            color: gold;
+            width: 30px;
+            height: 60px;
+            border-radius: 15px 0 0 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin: 10px 0 0 -10px;
+            z-index: 101;
+        }
+
+        .leaderboard h2 {
+            margin: 0 0 15px 0;
+            text-align: center;
+            font-size: 1.2em;
+            color: gold;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+
+        .total-snowflakes {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            background: linear-gradient(45deg, #FFD700, #FF4500, #FF0000, #FFD700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient 3s linear infinite;
+            background-size: 200% 200%;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .leaderboard-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        .leaderboard-item .position {
+            margin-right: 10px;
+            font-weight: bold;
+            min-width: 24px;
+        }
+
+        .leaderboard-item .name {
+            flex-grow: 1;
+            margin-right: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .leaderboard-item .score {
+            font-weight: bold;
+            color: gold;
+        }
+
+        /* GOLD */
+        .leaderboard-item:nth-child(1) {
+            background: linear-gradient(45deg, rgba(139, 0, 0, 0.3), rgba(255, 215, 0, 0.4), rgba(0, 100, 0, 0.3));
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .leaderboard-item:nth-child(1) .position {
+            color: #FFD700;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+
+        /* SILVER */
+        .leaderboard-item:nth-child(2) {
+            background: linear-gradient(45deg, rgba(139, 0, 0, 0.2), rgba(197, 196, 198, 0.4), rgba(0, 100, 0, 0.2));
+            box-shadow: 0 0 8px rgba(115, 110, 79, 0.3);
+            border: 1px solid rgba(115, 110, 79, 0.2);
+        }
+
+        .leaderboard-item:nth-child(2) .position {
+            color: #FFD700;
+            text-shadow: 0 0 4px rgba(255, 215, 0, 0.4);
+        }
+
+        /* BRONZE */
+        .leaderboard-item:nth-child(3) {
+            background: linear-gradient(45deg, rgba(139, 0, 0, 0.1), rgba(205, 127, 50, 0.4), rgba(0, 100, 0, 0.1));
+            box-shadow: 0 0 6px rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        .leaderboard-item:nth-child(3) .position {
+            color: #FFD700;
+            text-shadow: 0 0 3px rgba(255, 215, 0, 0.3);
+        }
+
+        .leaderboard-item.current-user {
+            animation: twinkle 1.5s infinite;
+        }
+
+        .join-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            background: linear-gradient(45deg, #8B0000, #006400);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 5px;
+            color: gold;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+
+        .join-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .current-score {
+            text-align: center;
+            margin-top: 15px;
+            padding: 10px;
+            background: linear-gradient(45deg, rgba(139, 0, 0, 0.3), rgba(0, 100, 0, 0.3));
+            border-radius: 5px;
+            font-weight: bold;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            color: gold;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+        }
+
+        .dialog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .dialog-content {
+            background: linear-gradient(135deg, #001833 0%, #000B1A 100%);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .dialog-content h3 {
+            margin: 0 0 20px 0;
+            font-size: 1.5em;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .dialog-content input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #FFD700;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.1em;
+        }
+
+        .dialog-content button {
+            padding: 10px 20px;
+            margin: 10px 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: transform 0.2s;
+        }
+
+        .dialog-content button.confirm {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: black;
+        }
+
+        .dialog-content button.cancel {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .dialog-content button:hover {
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
@@ -770,6 +1055,21 @@
 <audio id="welcomeMusic" preload="auto">
     <source src="resources/nggyu.mp3" type="audio/mpeg">
 </audio>
+
+<div class="leaderboard">
+    <button class="leaderboard-toggle">▶</button>
+    <h2>Доска почёта<br><span id="updateCountdown" style="font-size: 0.7em; color: #ffd9005d;"></span></h2>
+    <div class="total-snowflakes">
+        Всего уничтожено снежинок: <span id="totalSnowflakes">0</span>
+    </div>
+    <ul class="leaderboard-list" id="leaderboardList">
+        <!-- Список лидеров будет добавлен через JavaScript -->
+    </ul>
+    <button class="join-button" id="joinButton">Участвовать!</button>
+    <div class="current-score" id="currentScore" style="display: none">
+        Ваш результат: <span id="userScore">0</span>
+    </div>
+</div>
 
 <script>
     let MAX_TIME = 5 * 60 * 1000; // 5 минут
@@ -922,8 +1222,20 @@
     // Счётчик снежинок
     let snowflakeCount = parseInt(localStorage.getItem('snowflakeCount') || '0');
     const snowflakeCountElement = document.getElementById('snowflakeCount');
+    
+
+    // Leaderboard functionality
+    const leaderboard = document.querySelector('.leaderboard');
+    const leaderboardToggle = document.querySelector('.leaderboard-toggle');
+    const leaderboardList = document.getElementById('leaderboardList');
+    const joinButton = document.getElementById('joinButton');
+    const currentScore = document.getElementById('currentScore');
+    const userScoreSpan = document.getElementById('userScore');
+    const totalSnowflakesSpan = document.getElementById('totalSnowflakes');
+    const snowflakeCounter = document.querySelector('.snowflake-counter');
+
     // Инициализируем значение из localStorage
-    snowflakeCountElement.textContent = snowflakeCount;
+    updateSnowflakeCountUI();
 
     // Отслеживание активности счетчика снежинок
     let lastSnowflakeTime = Date.now();
@@ -933,14 +1245,15 @@
     function checkSnowflakeInactivity() {
         const now = Date.now();
         if (now - lastSnowflakeTime > INACTIVITY_DELAY) {
-            document.querySelector('.snowflake-counter').classList.add('inactive');
+            snowflakeCounter.classList.add('inactive');
         }
     }
 
     // Обновляем функцию updateSnowflakeCount
     function updateSnowflakeCount() {
         snowflakeCount++;
-        snowflakeCountElement.textContent = snowflakeCount;
+        updateSnowflakeCountUI();
+
         // Сохраняем новое значение в localStorage
         localStorage.setItem('snowflakeCount', snowflakeCount.toString());
         
@@ -948,7 +1261,7 @@
         lastSnowflakeTime = Date.now();
         
         // Убираем класс неактивности
-        document.querySelector('.snowflake-counter').classList.remove('inactive');
+        snowflakeCounter.classList.remove('inactive');
         
         // Сбрасываем и устанавливаем новый таймер неактивности
         clearTimeout(inactivityTimeout);
@@ -958,6 +1271,11 @@
         snowflakeCountElement.classList.remove('count-pop');
         void snowflakeCountElement.offsetWidth; // Сброс анимации
         snowflakeCountElement.classList.add('count-pop');
+    }
+
+    function updateSnowflakeCountUI() {
+        snowflakeCountElement.textContent = snowflakeCount;
+        userScoreSpan.textContent = snowflakeCount;
     }
 
     // Запускаем первичную проверку неактивности
@@ -1294,65 +1612,6 @@
         }
     }
 
-    // Добавляем кнопку сброса при наведении
-    const snowflakeCounter = document.querySelector('.snowflake-counter');
-    const resetButton = document.createElement('button');
-    resetButton.innerHTML = '↺';
-    resetButton.style.cssText = `
-        display: none;
-        background: none;
-        border: none;
-        color: white;
-        font-size: 1.2em;
-        cursor: pointer;
-        padding: 0 0 0 10px;
-        transition: transform 0.3s;
-    `;
-    resetButton.addEventListener('click', (e) => {
-        e.stopPropagation();
-        resetSnowFlakeCount();
-        resetButton.style.transform = 'rotate(360deg)';
-    });
-    snowflakeCounter.appendChild(resetButton);
-
-    snowflakeCounter.addEventListener('mouseenter', () => {
-        resetButton.style.display = 'block';
-    });
-    snowflakeCounter.addEventListener('mouseleave', () => {
-        resetButton.style.display = 'none';
-    });
-
-    // Отправляем снежинки на бэкенд
-    const postSnowFlakeBtn = document.getElementById('postSnowFlakes');
-    postSnowFlakeBtn.addEventListener('click', () => {
-        const name = prompt("Хотите отправить собранные снежинки? Нужно представиться:");
-        const asyncPostCall = async () => {
-            try {
-                const response = await fetch('https://functions.yandexcloud.net/d4ecqkmrugqls3jbh3f6', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'text/plain'
-                    },
-                    body: JSON.stringify({
-                        name: name,
-                        score: snowflakeCount
-                    })
-                });
-                resetSnowFlakeCount();
-                await response;
-            } catch(error) {
-                console.log(error)
-            }
-        }
-        asyncPostCall();
-    })
-
-    function resetSnowFlakeCount() {
-        snowflakeCount = 0;
-        snowflakeCountElement.textContent = '0';
-        localStorage.setItem('snowflakeCount', '0');
-    }
-
     // Функция для блокировки/разблокировки кнопки
     function toggleButtonState(button, duration) {
         button.disabled = true;
@@ -1633,6 +1892,191 @@
             star.style.animationDelay = `${Math.random() * 2}s`;
             container.appendChild(star);
         }
+    }
+
+    // Toggle leaderboard
+    leaderboardToggle.addEventListener('click', () => {
+        leaderboard.classList.toggle('collapsed');
+        leaderboardToggle.textContent = leaderboard.classList.contains('collapsed') ? '◀' : '▶';
+    });
+
+    // Get username from localStorage
+    let currentUsername = localStorage.getItem('snowflakeUsername');
+1
+    // Update UI based on username presence
+    function updateUIForUser() {
+        if (currentUsername) {
+            joinButton.style.display = 'none';
+            currentScore.style.display = 'block';
+        } else {
+            joinButton.style.display = 'block';
+            currentScore.style.display = 'none';
+        }
+    }
+
+    // Show join dialog
+    function showJoinDialog() {
+        const dialog = document.createElement('div');
+        dialog.className = 'dialog-overlay';
+        dialog.innerHTML = `
+            <div class="dialog-content">
+                <h3>🎄 Добро пожаловать в игру! 🎄</h3>
+                <p>Представьтесь, чтобы мы могли сохранить ваш результат в списке лидеров!</p>
+                <input type="text" id="usernameInput" placeholder="Ваше имя" maxlength="30">
+                <div>
+                    <button class="confirm">Подтвердить</button>
+                    <button class="cancel">Отмена</button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(dialog);
+
+        const input = dialog.querySelector('input');
+        const confirmBtn = dialog.querySelector('.confirm');
+        const cancelBtn = dialog.querySelector('.cancel');
+
+        input.focus();
+
+        confirmBtn.addEventListener('click', () => {
+            const username = input.value.trim();
+            if (username) {
+                currentUsername = username;
+                localStorage.setItem('snowflakeUsername', username);
+                updateUIForUser();
+                dialog.remove();
+                postUserScore();
+            }
+        });
+
+        cancelBtn.addEventListener('click', () => dialog.remove());
+
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') confirmBtn.click();
+        });
+    }
+
+    joinButton.addEventListener('click', showJoinDialog);
+
+    // Update data periodically
+    let updateCountdown = 10;
+    const updateCountdownElement = document.getElementById('updateCountdown');
+
+    function updateCountdownTimer() {
+        updateCountdown--;
+        if (updateCountdown <= 0) {
+            updateCountdownElement.textContent = '(обновление...)';
+        }
+        else {
+            updateCountdownElement.textContent = `(обновление через ${updateCountdown}с)`;
+        }
+    }
+
+    // API functions
+    async function fetchLeaders() {
+        try {
+            const response = await fetch('https://functions.yandexcloud.net/d4edu2a1bae56j6aldbs');
+            const leaders = await response.json();
+            updateLeaderboard(leaders);
+            updateCountdown = 10;
+        } catch (error) {
+            console.error('Error fetching leaders:', error);
+        }
+    }
+
+    async function fetchTotalSnowflakes() {
+        try {
+            const response = await fetch('https://functions.yandexcloud.net/d4e5qu6kvkae75r0e7qt');
+            const total = await response.json();
+            totalSnowflakesSpan.textContent = total.toLocaleString();
+        } catch (error) {
+            console.error('Error fetching total snowflakes:', error);
+        }
+    }
+
+    async function postUserScore() {
+        if (!currentUsername) return;
+        
+        try {
+            await fetch('https://functions.yandexcloud.net/d4ecqkmrugqls3jbh3f6', {
+                method: 'POST',
+                body: JSON.stringify({
+                    name: currentUsername,
+                    score: snowflakeCount
+                })
+            });
+        } catch (error) {
+            console.error('Error posting score:', error);
+        }
+    }
+
+    async function fetchUserScore() {
+        if (!currentUsername) return;
+
+        try {
+            const response = await fetch('https://functions.yandexcloud.net/d4eg7hdbc3d5vf9seb1o', {
+                method: 'POST',
+                body: JSON.stringify({
+                    name: currentUsername
+                })
+            });
+            const score = await response.json();
+
+            if (score && score.score && score.score > snowflakeCount) {
+                snowflakeCount = score.score;
+                updateSnowflakeCountUI();
+            }
+        } catch (error) {
+            console.error('Error fetching user score:', error);
+        }
+    }
+
+    function updateLeaderboard(leaders) {
+        leaderboardList.innerHTML = '';
+        leaders.forEach((leader, index) => {
+            const li = document.createElement('li');
+            li.className = 'leaderboard-item';
+            if (leader.name === currentUsername) {
+                li.classList.add('current-user');
+            }
+            
+            // Добавляем медали для первых трех мест
+            let position = (index + 1).toString();
+            if (index === 0) position += ' 🥇';
+            else if (index === 1) position += ' 🥈';
+            else if (index === 2) position += ' 🥉';
+            
+            li.innerHTML = `
+                <span class="position">${position}</span>
+                <span class="name">${leader.name}</span>
+                <span class="score">${leader.score} ❄</span>
+            `;
+            leaderboardList.appendChild(li);
+        });
+    }
+
+    
+    fetchLeaders();
+    fetchTotalSnowflakes();
+    fetchUserScore();
+    postUserScore();
+
+    // Start updates
+    setInterval(fetchUserScore, 5000);
+    setInterval(postUserScore, 5000);
+    setInterval(updateCountdownTimer, 1000);
+    setInterval(() => {
+        fetchLeaders();
+        fetchTotalSnowflakes();
+    }, 10000);
+
+    // Initial UI update
+    updateUIForUser();
+
+    // On mobile devices, start with collapsed leaderboard
+    if (window.innerWidth <= 768) {
+        leaderboard.classList.add('collapsed');
+        leaderboardToggle.textContent = '▶';
     }
 </script>
 </body>
