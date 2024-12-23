@@ -2,7 +2,7 @@
 import { MAX_TIME, usernames } from './config.js';
 import { getRandomElement } from './utils.js';
 import { createInitialStars } from './stars.js';
-import { t } from './i18n';
+import { t } from './i18n/index.js';
 
 let loadingStartTime; // Время начала загрузки
 let mainProgressInterval; // Интервал обновления прогресс-бара
