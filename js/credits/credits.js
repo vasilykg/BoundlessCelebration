@@ -1,4 +1,16 @@
 // Создание звёзд на фоне
+import { t, updatePageText, setLanguage, getCurrentLanguage } from '../i18n/index.js';
+
+// Функция для установки специальных стилей в зависимости от языка
+function updateLanguageStyles(lang) {
+    document.body.classList.remove('lang-dovah', 'lang-mordor');
+    if (lang === 'dovah') {
+        document.body.classList.add('lang-dovah');
+    } else if (lang === 'mordor') {
+        document.body.classList.add('lang-mordor');
+    }
+}
+
 function createStars() {
     const starsContainer = document.querySelector('.stars');
     const numberOfStars = 200;
@@ -33,11 +45,9 @@ let currentVolume = 0.1;
 function toggleAudio() {
     if (audio.paused) {
         audio.play();
-        audioButton.textContent = 'Выключить музыку';
         currentVolume = audio.volume;
     } else {
         audio.pause();
-        audioButton.textContent = 'Включить музыку';
         audio.volume = currentVolume;
     }
 }
@@ -65,7 +75,6 @@ document.getElementById('startButton').addEventListener('click', function() {
     audio.volume = 0.1;
     audio.play().catch(() => {
         console.log('Автовоспроизведение заблокировано браузером');
-        audioButton.textContent = 'Включить музыку';
     });
 
     // Показываем аудио контролы
@@ -98,7 +107,6 @@ document.getElementById('startButton').addEventListener('click', function() {
                     element.style.opacity = '1';
                 }
             });
-
             // Если все элементы исчезли, сбрасываем анимацию
             if ([...elements].every(el => el.style.opacity === '0')) {
                 crawlText.classList.remove('animate');
@@ -112,4 +120,19 @@ document.getElementById('startButton').addEventListener('click', function() {
         // Запускаем проверку каждые 100ms
         setInterval(checkElementVisibility, 100);
     });
+
 });
+
+// Инициализация локализации
+const languageSelect = document.getElementById('languageSelect');
+const currentLang = getCurrentLanguage();
+languageSelect.value = currentLang;
+updateLanguageStyles(currentLang); // Применяем стили при загрузке
+
+languageSelect.addEventListener('change', (e) => {
+    const newLang = e.target.value;
+    setLanguage(newLang);
+    updateLanguageStyles(newLang);
+});
+
+updatePageText();
