@@ -31,6 +31,7 @@ function showJoinDialog() {
             <h3>${t('join.title')}</h3>
             <p>${t('join.description')}</p>
             <input type="text" id="usernameInput" placeholder="${t('join.placeholder')}" maxlength="30">
+            <p class="error-text" hidden>${t('join.invalid_username')}</p>
             <div>
                 <button class="confirm">${t('join.confirm')}</button>
                 <button class="cancel">${t('join.cancel')}</button>
@@ -43,14 +44,19 @@ function showJoinDialog() {
     const input = dialog.querySelector('input');
     const confirmBtn = dialog.querySelector('.confirm');
     const cancelBtn = dialog.querySelector('.cancel');
+    const errorText = dialog.querySelector('.error-text');
 
     input.focus();
+
+    input.addEventListener('input', () => {
+        errorText.hidden = true;
+    });
 
     confirmBtn.addEventListener('click', () => {
         const username = input.value.trim();
 
         if (!username || !/[A-Za-zА-Яа-яЁё]+ [A-Za-zА-Яа-яЁё]+$/.test(username)) {
-            alert(t('join.invalid_username'));
+            errorText.hidden = false;
             return;
         }
 
