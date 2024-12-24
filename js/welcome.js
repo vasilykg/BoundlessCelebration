@@ -92,8 +92,30 @@ export function initCelebrationButton() {
         document.getElementById('progress-container').style.display = 'none';
         document.getElementById('buttons-container').style.display = 'none';
 
-        // Убираем статус-бар полностью
-        document.querySelector('.status-bar').style.display = 'none';
+        // Скрываем элементы из статус-бара
+        document.querySelector('.status-text').style.display = 'none';
+        document.querySelector('.volume-control').style.display = 'none';
+
+        // Создаем бегущую строку из пожеланий
+        const goodWishes = [
+            "Счастливого нового года!",
+            "Happy New Year!",
+            "Bonne année!",
+            "سنة جديدة سعيدة",
+            "Срећна Нова година!",
+            "¡Feliz año nuevo!",
+            "Жаны жылыңар менен!",
+            "Gott nytt år!",
+            "CHÚC MỪNG NĂM MỚI!",
+            "Selamat tahun baru!",
+            "សួស្តីឆ្នាំថ្មី!",
+            "Yeni iliniz mübarək!"
+        ];
+        const marqueeText = goodWishes.join(' ⭐ ');
+
+        let goodWishesBlock = document.querySelector('.good-wishes');
+        goodWishesBlock.style.display = 'block';
+        goodWishesBlock.innerHTML = `<span class="marquee">${marqueeText}</span>`;
 
         startFireworks();
         document.getElementById('celebrationContainer').style.display = 'block';

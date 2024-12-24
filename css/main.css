@@ -413,6 +413,19 @@ option {
     50% { opacity: 0.5; filter: brightness(0.5); }
 }
 
+/* Стиль для бегущей строки */
+.marquee {
+    display: inline-block;
+    animation: marquee 40s linear infinite;
+    white-space: nowrap;
+    padding-left: 100%;
+}
+
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
 .celebration-container {
     position: fixed;
     top: 50%;
