@@ -91,9 +91,9 @@ export const translations = {
     'credits.audio.toggle': "QoQ wab",
     'credits.start': "jIHtaH!",
     'credits.intro': "wa'leS, Hoch lengwI'pu'...",
-    'credits.paragraph1': "wa' poH Qapla' 'ej HoS.\n\nHochDIch tera' jar wa'maH cha' jar cha'maH vagh, QaQ HR Qel. DaH, QaQ Qel, QaQ chenmoH, 'ej QaQ Qapla'.",
+    'credits.paragraph1': "wa' poH Qapla' 'ej HoS.\n\nHochDIch tera' jar wa'maH cha' jar cha'maH vagh,\nQaQ HR Qel.\nDaH, QaQ Qel, QaQ chenmoH, 'ej QaQ Qapla'.",
     'credits.paragraph2': "wa'vatlh wej QaQ Qel chenmoH.\n\nvaghmaH Qapla' chenmoH.\n\nwejmaH QaQ chenmoH Qapla'.",
-    'credits.paragraph3': "loSmaH QaQ chenmoH Qapla'.\n\nQaQ HoS, QaQ chenmoH.",
-    'credits.paragraph4': "wa'maH QaQ chenmoH Qapla'.\n\nQaQ HoS, QaQ chenmoH.",
-    'credits.paragraph5': "DaH, QaQ Qapla', QaQ chenmoH."
+    'credits.paragraph3': "loSmaH QaQ chenmoH Qapla'.\n\nQaQ HoS,\nQaQ chenmoH.",
+    'credits.paragraph4': "wa'maH QaQ chenmoH Qapla'.\n\nQaQ HoS,\nQaQ chenmoH.",
+    'credits.paragraph5': "DaH, QaQ Qapla',\nQaQ chenmoH."
 }; 
