@@ -44,6 +44,7 @@ export const translations = {
     'join.placeholder': 'Goth Snaga',
     'join.confirm': 'Ghâsh',
     'join.cancel': 'Burzum',
+    'join.invalid_username': 'Matum Goth Snaga, Mordor',
 
     // Temporary button
     'temp.button': 'Mokûrz Snaga',

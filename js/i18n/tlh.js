@@ -44,6 +44,7 @@ export const translations = {
     'join.placeholder': "pongwIj'e'",
     'join.confirm': "yIchel",
     'join.cancel': "yIqIl",
+    'join.invalid_username': "pongwIj'e' yIghItlh, Duj",
 
     // Temporary button
     'temp.button': "pItlh DuteH",

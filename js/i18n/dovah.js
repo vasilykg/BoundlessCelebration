@@ -44,6 +44,7 @@ export const translations = {
     'join.placeholder': 'Hin Faan',
     'join.confirm': 'Geh',
     'join.cancel': 'Nid',
+    'join.invalid_username': 'Ahrk Mu Fen Hin Faan, Dovah',
 
     // Temporary button
     'temp.button': 'Ni Mindok',

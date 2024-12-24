@@ -48,15 +48,19 @@ function showJoinDialog() {
 
     confirmBtn.addEventListener('click', () => {
         const username = input.value.trim();
-        if (username) {
-            currentUsername = username;
-            localStorage.setItem('snowflakeUsernameX', username);
-            updateUIForUser();
-            dialog.remove();
-            previousSnowflakeCount = getSnowflakeCount();
-            postUserScore();
-            fetchLeaders();
+
+        if (!username || !username.match(/[A-Za-zА-Яа-яЁё]+ [A-Za-zА-Яа-яЁё]+$/)) {
+            alert(t('join.invalid_username'));
+            return;
         }
+
+        currentUsername = username;
+        localStorage.setItem('snowflakeUsernameX', username);
+        updateUIForUser();
+        dialog.remove();
+        previousSnowflakeCount = getSnowflakeCount();
+        postUserScore();
+        fetchLeaders();
     });
 
     cancelBtn.addEventListener('click', () => dialog.remove());
