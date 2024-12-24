@@ -1,7 +1,7 @@
 // Управление снежинками
 import { INACTIVITY_DELAY } from './config.js';
 
-let snowflakeCount = parseInt(localStorage.getItem('snowflakeCount') || '0');
+let snowflakeCount = parseInt(localStorage.getItem('snowflakeCountX') || '0');
 let lastSnowflakeTime = Date.now();
 let inactivityTimeout;
 
@@ -58,7 +58,7 @@ function updateSnowflakeCount() {
     updateSnowflakeCountUI();
 
     // Сохраняем новое значение в localStorage
-    localStorage.setItem('snowflakeCount', snowflakeCount.toString());
+    localStorage.setItem('snowflakeCountX', snowflakeCount.toString());
 
     // Обновляем время последней активности
     lastSnowflakeTime = Date.now();

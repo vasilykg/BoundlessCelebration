@@ -1,11 +1,13 @@
 // Управление прогресс-баром
 import { MAX_TIME, usernames } from './config.js';
-import { getRandomElement } from './utils.js';
+import { getRandomElement, shuffleArray } from './utils.js';
 import { createInitialStars } from './stars.js';
 import { t } from './i18n/index.js';
 
 let loadingStartTime; // Время начала загрузки
 let mainProgressInterval; // Интервал обновления прогресс-бара
+let unusedPhraseIndices = []; // Массив неиспользованных индексов фраз
+let unusedUsernameIndices = []; // Массив неиспользованных индексов имён
 
 // Основной прогресс
 export function updateMainProgress() {
@@ -55,9 +57,26 @@ export function updateLoadingText() {
     // Выбираем рандомное время обновления от 3 до 5 сек
     const nextDelay = 3000 + Math.random() * 2000;
 
-    let phrases = t('loading.phrases');
-    let phrase = getRandomElement(phrases);
-    let currentUsername = getRandomElement(usernames);
+    // Если массив индексов фраз пуст, создаём новый перемешанный массив индексов
+    if (unusedPhraseIndices.length === 0) {
+        const phrases = t('loading.phrases');
+        unusedPhraseIndices = Array.from({ length: phrases.length }, (_, i) => i);
+        shuffleArray(unusedPhraseIndices);
+    }
+
+    // Если массив индексов имён пуст, создаём новый перемешанный массив индексов
+    if (unusedUsernameIndices.length === 0) {
+        unusedUsernameIndices = Array.from({ length: usernames.length }, (_, i) => i);
+        shuffleArray(unusedUsernameIndices);
+    }
+
+    // Берём последний индекс из каждого массива и получаем соответствующие элементы
+    const phraseIndex = unusedPhraseIndices.pop();
+    const usernameIndex = unusedUsernameIndices.pop();
+    
+    let phrase = t('loading.phrases')[phraseIndex];
+    let currentUsername = usernames[usernameIndex];
+    
     phrase = phrase.replace('%USERNAME%', currentUsername);
     loadingText.textContent = phrase;
 
@@ -68,6 +87,13 @@ export function updateLoadingText() {
 export function initProgress() {
     loadingStartTime = Date.now();
     mainProgressInterval = setInterval(updateMainProgress, 200);
+    
+    // Инициализируем массивы индексов при старте
+    const phrases = t('loading.phrases');
+    unusedPhraseIndices = Array.from({ length: phrases.length }, (_, i) => i);
+    unusedUsernameIndices = Array.from({ length: usernames.length }, (_, i) => i);
+    shuffleArray(unusedPhraseIndices);
+    shuffleArray(unusedUsernameIndices);
 }
 
 // Функция для ускорения загрузки
