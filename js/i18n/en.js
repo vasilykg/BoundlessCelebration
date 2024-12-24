@@ -44,6 +44,7 @@ export const translations = {
     'join.placeholder': 'Your name',
     'join.confirm': 'Confirm',
     'join.cancel': 'Cancel',
+    'join.invalid_username': 'Please introduce yourself with first name and last name!',
 
     // Temporary button
     'temp.button': 'Button is still in development',

@@ -44,6 +44,7 @@ export const translations = {
     'join.placeholder': 'اسمك',
     'join.confirm': 'تأكيد',
     'join.cancel': 'إلغاء',
+    'join.invalid_username': 'الرجاء تقديم نفسك بالاسم الأول والاسم الأخير!',
 
     // Temporary button
     'temp.button': 'الزر قيد التطوير',

@@ -44,6 +44,7 @@ export const translations = {
     'join.placeholder': 'Ваше имя',
     'join.confirm': 'Подтвердить',
     'join.cancel': 'Отмена',
+    'join.invalid_username': 'Пожалуйста, представьтесь с именем и фамилией!',
 
     // Временная кнопка
     'temp.button': 'Кнопка ещё разрабатывается',
