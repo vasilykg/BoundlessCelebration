@@ -3,32 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>История разработки</title>
+    <title data-i18n="credits.title">История разработки</title>
+    <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/credits/credits.css">
     <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23000" stroke="%23FFE81F" stroke-width="2"/><text x="50" y="60" font-family="Arial" font-size="30" fill="%23FFE81F" text-anchor="middle">CMA</text></svg>'>
 </head>
 <body>
+    <div class="language-selector">
+        <select id="languageSelect">
+            <option value="ru">Русский</option>
+            <option value="en">English</option>
+            <option value="ar">العربية</option>
+            <option value="tlh">tlhIngan Hol</option>
+            <option value="dovah">Dovahzul Tinvaak</option>
+            <option value="mordor">Ash Nazg Durbatulûk</option>
+        </select>
+    </div>
+
     <div class="stars"></div>
     
     <div class="logo-container">CMA</div>
     
     <div id="audio-controls">
-        <button id="audioButton">Выключить музыку</button>
+        <button id="audioButton" data-i18n="credits.audio.toggle">Выключить музыку</button>
         <input type="range" id="volumeControl" min="0" max="100" value="10">
     </div>
     
     <div class="crawl-container">
         <div class="crawl-text">
-            <h1>Давным-давно, в далёкой-далёкой галактике…</h1>
+            <h1 data-i18n="credits.intro">Давным-давно, в далёкой-далёкой галактике…</h1>
 
-            <p>Настал период величайших испытаний и неукротимого энтузиазма.
+            <p data-i18n="credits.paragraph1">Настал период величайших испытаний и неукротимого энтузиазма.
 
 С 12 по 25 декабря, в бескрайних просторах канала обсуждения ТЗ от самого HR,
 воцарился настоящий рабочий штурм. Там, в цифровом мраке, вспыхнули
 яркие искры идей, разгорелись страсти, и возникло новое творение,
 способное изменить ход истории разработки.</p>
             
-            <p>За эти дни было извергнуто более 300 сообщений, наполненных спором,
+            <p data-i18n="credits.paragraph2">За эти дни было извергнуто более 300 сообщений, наполненных спором,
 мудростью и дерзкими предположениями.
 
 50 непростых задач были успешно завершены,
@@ -37,34 +49,35 @@
 30 отважных пулреквестов, словно звездные корабли, проломили путь
 сквозь тёмные коридоры кода и слились воедино.</p>
             
-            <p>3000 строк кода взмыли, подобно звёздной пыли,
+            <p data-i18n="credits.paragraph3">3000 строк кода взмыли, подобно звёздной пыли,
 соединяя воедино видение и реальность.
 
 И когда казалось, что сил уже не хватит,
 на помощь был призван искусственный интеллект,
 добавивший мощь своего разума к общей миссии.</p>
             
-            <p>10 доблестных авторов, словно джедаи, объединили свои усилия,
+            <p data-i18n="credits.paragraph4">10 доблестных авторов, словно джедаи, объединили свои усилия,
 чтобы воплотить мечту, наполнить продукт живительной энергией
 и подготовить его к великому выходу.
 
 Их совместный труд – это история о вере в цель,
 о готовности к свершениям и о непоколебимой решимости победить.</p>
             
-            <p>И теперь, когда долгий путь пройден,
+            <p data-i18n="credits.paragraph5">И теперь, когда долгий путь пройден,
 лишь звездный свет укажет дорогу новому продукту,
 готовому сиять в бесконечном космосе идей и возможностей.</p>
         </div>
     </div>
     
     <div class="startButtonContainer">
-        <button id="startButton">Я готов!</button>
+        <button id="startButton" data-i18n="credits.start">Я готов!</button>
     </div>
 
     <audio id="bgMusic" loop>
         <source src="resources/Star_Wars.mp3" type="audio/mpeg">
     </audio>
 
-    <script src="js/credits/credits.js"></script>
+    <script type="module" src="js/i18n/index.js"></script>
+    <script type="module" src="js/credits/credits.js"></script>
 </body>
 </html>

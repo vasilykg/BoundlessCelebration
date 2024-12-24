@@ -84,5 +84,16 @@ export const translations = {
         "%USERNAME% is optimizing Santa's flight trajectory...",
         "%USERNAME% is testing New Year resolutions strength...",
         "%USERNAME% is arranging snowflakes in snowdrift..."
-    ]
+    ],
+
+    // Credits screen
+    'credits.title': 'Development Story',
+    'credits.audio.toggle': 'Toggle Music',
+    'credits.start': 'I\'m ready!',
+    'credits.intro': 'A long time ago in a galaxy far, far away...',
+    'credits.paragraph1': 'It was a period of great trials and unstoppable enthusiasm.\n\nFrom December 12 to 25, in the vast expanses of the HR\'s requirements discussion channel, a true working storm reigned. There, in the digital darkness, bright sparks of ideas flashed, passions flared, and a new creation emerged, capable of changing the course of development history.',
+    'credits.paragraph2': 'During these days, over 300 messages were unleashed, filled with debate, wisdom, and bold assumptions.\n\n50 challenging tasks were successfully completed, each strengthening the foundation of the upcoming release.\n\n30 brave pull requests, like starships, broke through the dark corridors of code and merged into one.',
+    'credits.paragraph3': '3000 lines of code soared, like stardust, uniting vision and reality.\n\nAnd when it seemed that strength would fail, artificial intelligence was called upon, adding the power of its mind to the common mission.',
+    'credits.paragraph4': '10 valiant authors, like Jedi, united their efforts to bring the dream to life, fill the product with vital energy, and prepare it for the great release.\n\nTheir joint work is a story about belief in the goal, readiness for achievements, and unwavering determination to win.',
+    'credits.paragraph5': 'And now, with the long journey complete, only starlight will guide the way for the new product, ready to shine in the endless cosmos of ideas and possibilities.',
 }; 
