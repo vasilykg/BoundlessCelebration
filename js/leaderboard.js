@@ -49,7 +49,7 @@ function showJoinDialog() {
     confirmBtn.addEventListener('click', () => {
         const username = input.value.trim();
 
-        if (!username || !username.match(/[A-Za-zА-Яа-яЁё]+ [A-Za-zА-Яа-яЁё]+$/)) {
+        if (!username || !/[A-Za-zА-Яа-яЁё]+ [A-Za-zА-Яа-яЁё]+$/.test(username)) {
             alert(t('join.invalid_username'));
             return;
         }
