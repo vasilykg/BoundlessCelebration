@@ -1,5 +1,58 @@
 // Вспомогательные функции
 
+const ENCRYPTION_KEY = 'BC2025'; // Ключ шифрования
+
+export function encryptValue(value) {
+    // Преобразуем число в строку и добавляем случайную соль
+    const salt = Math.random().toString(36).substring(2, 8);
+    const valueWithSalt = `${value}:${salt}`;
+
+    // Создаем контрольную сумму
+    let checksum = 0;
+    for (let i = 0; i < valueWithSalt.length; i++) {
+        checksum = (checksum + valueWithSalt.charCodeAt(i)) % 256;
+    }
+
+    // Шифруем значение с солью и контрольной суммой
+    const fullValue = `${valueWithSalt}:${checksum}`;
+    let encrypted = '';
+    for (let i = 0; i < fullValue.length; i++) {
+        const charCode = fullValue.charCodeAt(i) ^ ENCRYPTION_KEY.charCodeAt(i % ENCRYPTION_KEY.length);
+        encrypted += String.fromCharCode(charCode);
+    }
+
+    return btoa(encrypted); // Кодируем в base64
+}
+
+export function decryptValue(encrypted) {
+    try {
+        // Декодируем из base64 и расшифровываем
+        const decoded = atob(encrypted);
+        let decrypted = '';
+        for (let i = 0; i < decoded.length; i++) {
+            const charCode = decoded.charCodeAt(i) ^ ENCRYPTION_KEY.charCodeAt(i % ENCRYPTION_KEY.length);
+            decrypted += String.fromCharCode(charCode);
+        }
+
+        // Разбиваем на компоненты
+        const [value, salt, storedChecksum] = decrypted.split(':');
+
+        // Проверяем контрольную сумму
+        let checksum = 0;
+        const valueWithSalt = `${value}:${salt}`;
+        for (let i = 0; i < valueWithSalt.length; i++) {
+            checksum = (checksum + valueWithSalt.charCodeAt(i)) % 256;
+        }
+
+        if (checksum === parseInt(storedChecksum)) {
+            return parseInt(value);
+        }
+        return 0; // Возвращаем 0, если проверка не прошла
+    } catch (e) {
+        return 0; // Возвращаем 0 при любой ошибке расшифровки
+    }
+}
+
 // Получение случайного элемента из массива
 export function getRandomElement(arr) {
     const idx = Math.floor(Math.random() * arr.length);
