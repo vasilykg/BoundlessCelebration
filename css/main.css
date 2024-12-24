@@ -1156,3 +1156,7 @@ button:disabled {
 .language-selector select option[value="mordor"] {
     font-family: 'Mordor', fantasy;
 }
+
+.error-text {
+    color: #ff0000;
+}
