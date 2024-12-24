@@ -2,7 +2,7 @@
 import { getSnowflakeCount, setSnowflakeCount } from './snowflakes.js';
 import { t } from './i18n/index.js';
 
-let currentUsername = localStorage.getItem('snowflakeUsername');
+let currentUsername = localStorage.getItem('snowflakeUsernameX');
 let updateCountdown = 10;
 
 // Обновление UI на основе наличия имени пользователя
@@ -49,7 +49,7 @@ function showJoinDialog() {
         const username = input.value.trim();
         if (username) {
             currentUsername = username;
-            localStorage.setItem('snowflakeUsername', username);
+            localStorage.setItem('snowflakeUsernameX', username);
             updateUIForUser();
             dialog.remove();
             postUserScore();
