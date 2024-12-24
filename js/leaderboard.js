@@ -58,6 +58,7 @@ function showJoinDialog() {
         localStorage.setItem('snowflakeUsernameX', username);
         updateUIForUser();
         dialog.remove();
+        previousSnowflakeCount = getSnowflakeCount();
         postUserScore();
         fetchLeaders();
     });
