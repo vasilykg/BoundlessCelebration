@@ -91,9 +91,9 @@ export const translations = {
     'credits.audio.toggle': "Ghâsh Snaga",
     'credits.start': "Matum Ghâsh!",
     'credits.intro': "Goth-ishi, Mordor Snaga...",
-    'credits.paragraph1': "Ash Nazg Durbatulûk.\n\nGoth-ishi HR, Mordor Snaga Ghâsh Burzum-ishi. Ghâsh Nazg, Ghâsh Durbatulûk.",
+    'credits.paragraph1': "Ash Nazg Durbatulûk.\n\nGoth-ishi HR, Mordor Snaga Ghâsh Burzum-ishi.\nGhâsh Nazg,\nGhâsh Durbatulûk.",
     'credits.paragraph2': "Ghâsh Nazg Durbatulûk.\n\nMordor Snaga Ghâsh Burzum-ishi.\n\nGhâsh Nazg Durbatulûk.",
-    'credits.paragraph3': "Ghâsh Nazg Durbatulûk.\n\nMordor Snaga Ghâsh Burzum-ishi.",
-    'credits.paragraph4': "Ghâsh Nazg Durbatulûk.\n\nMordor Snaga Ghâsh Burzum-ishi.",
-    'credits.paragraph5': "Ash Nazg Durbatulûk, Ash Nazg Gimbatul."
+    'credits.paragraph3': "Ghâsh Nazg Durbatulûk.\n\nMordor Snaga Ghâsh\nBurzum-ishi.",
+    'credits.paragraph4': "Ghâsh Nazg Durbatulûk.\n\nMordor Snaga Ghâsh\nBurzum-ishi.",
+    'credits.paragraph5': "Ash Nazg Durbatulûk,\nAsh Nazg Gimbatul."
 }; 

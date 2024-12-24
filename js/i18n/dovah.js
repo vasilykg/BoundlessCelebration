@@ -91,9 +91,9 @@ export const translations = {
     'credits.audio.toggle': "Staadnau Lovaas",
     'credits.start': "Zu'u Los Redy!",
     'credits.intro': "Lingrah Tiid Ko, Praan Do Keizaal...",
-    'credits.paragraph1': "Nii Lost Tiid Do Brah Ahrk Sahrot Mul.\n\nKo Dez Ahrk Vah, Ko Dovah Tinvaak Do HR, Nii Lost Tiid Do Kein. Ko Vulom, Yol Do Hahnu Kos Ahrk Staadnau Dez.",
+    'credits.paragraph1': "Nii Lost Tiid Do Brah Ahrk Sahrot Mul.\n\nKo Dez Ahrk Vah, Ko Dovah Tinvaak Do HR,\nNii Lost Tiid Do Kein.\nKo Vulom, Yol Do Hahnu Kos Ahrk Staadnau Dez.",
     'credits.paragraph2': "Ko Daar Tiid, Wah Hunhre Ahrk Sed QaQ Tinvaak.\n\nVahmaan Brah Dez Los Staadnau.\n\nSed QaQ Dez Los Staadnau.",
-    'credits.paragraph3': "Sed Hunhre QaQ Dez Los Staadnau.\n\nFin Tiid Do Mul Los Praan, Ahrk Dovah Tinvaak Los Staadnau.",
-    'credits.paragraph4': "Med Dovahkiin, Nii Lost Tiid Do Kein.\n\nNii Los Tinvaak Do Mul, Do Staadnau, Ahrk Do Sahrot Dovah.",
-    'credits.paragraph5': "Ahrk Nu, Ko Fin Lein Do Staadnau, Nii Los Tiid Do Dez."
+    'credits.paragraph3': "Sed Hunhre QaQ Dez Los Staadnau.\n\nFin Tiid Do Mul Los Praan,\nAhrk Dovah Tinvaak Los Staadnau.",
+    'credits.paragraph4': "Med Dovahkiin, Nii Lost Tiid Do Kein.\n\nNii Los Tinvaak Do Mul,\nDo Staadnau, Ahrk Do Sahrot Dovah.",
+    'credits.paragraph5': "Ahrk Nu, Ko Fin Lein Do Staadnau,\nNii Los Tiid Do Dez."
 }; 
