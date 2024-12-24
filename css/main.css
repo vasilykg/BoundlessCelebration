@@ -416,9 +416,10 @@ option {
 /* Стиль для бегущей строки */
 .marquee {
     display: inline-block;
-    animation: marquee 40s linear infinite;
+    animation: marquee 120s linear infinite;
+    animation-delay: -30s;
     white-space: nowrap;
-    padding-left: 100%;
+    padding-left: 50%;
 }
 
 @keyframes marquee {
