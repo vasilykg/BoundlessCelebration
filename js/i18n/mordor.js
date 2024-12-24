@@ -83,5 +83,16 @@ export const translations = {
         "%USERNAME% Ghâsh Nazg...",
         "%USERNAME% Burzum Mordor...",
         "%USERNAME% Matum Golug..."
-    ]
+    ],
+
+    // Credits screen
+    'credits.title': "Ghâsh-ishi Durbatulûk",
+    'credits.audio.toggle': "Ghâsh Snaga",
+    'credits.start': "Matum Ghâsh!",
+    'credits.intro': "Goth-ishi, Mordor Snaga...",
+    'credits.paragraph1': "Ash Nazg Durbatulûk.\n\nGoth-ishi HR, Mordor Snaga Ghâsh Burzum-ishi. Ghâsh Nazg, Ghâsh Durbatulûk.",
+    'credits.paragraph2': "Ghâsh Nazg Durbatulûk.\n\nMordor Snaga Ghâsh Burzum-ishi.\n\nGhâsh Nazg Durbatulûk.",
+    'credits.paragraph3': "Ghâsh Nazg Durbatulûk.\n\nMordor Snaga Ghâsh Burzum-ishi.",
+    'credits.paragraph4': "Ghâsh Nazg Durbatulûk.\n\nMordor Snaga Ghâsh Burzum-ishi.",
+    'credits.paragraph5': "Ash Nazg Durbatulûk, Ash Nazg Gimbatul."
 }; 

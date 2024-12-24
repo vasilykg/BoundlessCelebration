@@ -4,6 +4,7 @@ import { t } from './i18n/index.js';
 
 let currentUsername = localStorage.getItem('snowflakeUsernameX');
 let updateCountdown = 10;
+let previousSnowflakeCount = 0;
 
 // Обновление UI на основе наличия имени пользователя
 function updateUIForUser() {
@@ -52,6 +53,7 @@ function showJoinDialog() {
             localStorage.setItem('snowflakeUsernameX', username);
             updateUIForUser();
             dialog.remove();
+            previousSnowflakeCount = getSnowflakeCount();
             postUserScore();
             fetchLeaders();
         }
@@ -81,6 +83,10 @@ function updateCountdownTimer() {
 async function fetchLeaders() {
     try {
         const response = await fetch('https://functions.yandexcloud.net/d4edu2a1bae56j6aldbs');
+        if (!response.ok) {
+            console.log('Error fetching leaders:', response.status, response);
+            return;
+        }
         const leaders = await response.json();
         updateLeaderboard(leaders);
         updateCountdown = 10;
@@ -92,6 +98,10 @@ async function fetchLeaders() {
 async function fetchTotalSnowflakes() {
     try {
         const response = await fetch('https://functions.yandexcloud.net/d4e5qu6kvkae75r0e7qt');
+        if (!response.ok) {
+            console.log('Error fetching total snowflakes:', response.status, response);
+            return;
+        }
         const total = await response.json();
         const totalSnowflakesSpan = document.getElementById('totalSnowflakes');
         totalSnowflakesSpan.textContent = total.toLocaleString();
@@ -103,16 +113,24 @@ async function fetchTotalSnowflakes() {
 async function postUserScore() {
     if (!currentUsername) return;
 
-    try {
-        await fetch('https://functions.yandexcloud.net/d4ecqkmrugqls3jbh3f6', {
-            method: 'POST',
-            body: JSON.stringify({
-                name: currentUsername,
-                score: getSnowflakeCount()
-            })
-        });
-    } catch (error) {
-        console.error('Error posting score:', error);
+    const currentCount = getSnowflakeCount();
+    if (currentCount > previousSnowflakeCount) {
+        try {
+            const response = await fetch('https://functions.yandexcloud.net/d4ecqkmrugqls3jbh3f6', {
+                method: 'POST',
+                body: JSON.stringify({
+                    name: currentUsername,
+                    score: currentCount
+                })
+            });
+            if (!response.ok) {
+                console.log('Error posting score:', response.status, response);
+                return;
+            }
+            previousSnowflakeCount = currentCount;
+        } catch (error) {
+            console.error('Error posting score:', error);
+        }
     }
 }
 
@@ -126,6 +144,10 @@ async function fetchUserScore() {
                 name: currentUsername
             })
         });
+        if (!response.ok) {
+            console.log('Error fetching user score:', response.status, response);
+            return;
+        }
         const score = await response.json();
 
         if (score && score.score && score.score > getSnowflakeCount()) {

@@ -4,6 +4,7 @@ import { createSnowflake } from './snowflakes.js';
 import { randomizeButtons } from './buttons.js';
 import { initProgress, updateLoadingText } from './progress.js';
 import { startFireworks } from './fireworks.js';
+import { t } from './i18n/index.js';
 
 export function initWelcomeScreen() {
     const welcomeOverlay = document.getElementById('welcomeOverlay');
@@ -101,7 +102,8 @@ export function initCelebrationButton() {
         const creditsButton = document.createElement('a');
         creditsButton.href = 'credits.html';
         creditsButton.className = 'credits-button';
-        creditsButton.textContent = 'Посмотреть титры';
+        creditsButton.setAttribute('data-i18n', 'button.view_credits');
+        creditsButton.textContent = t('button.view_credits');
         document.body.appendChild(creditsButton);
         creditsButton.style.display = 'block';
     });
