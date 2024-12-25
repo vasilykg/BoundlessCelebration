@@ -15,7 +15,7 @@ function updateUIForUser() {
     
     if (currentUsername) {
         joinButton.style.display = 'none';
-        currentScore.style.display = 'block';
+        currentScore.style.display = 'flex';
     } else {
         joinButton.style.display = 'block';
         currentScore.style.display = 'none';
@@ -160,8 +160,8 @@ async function fetchUserScore() {
         }
         const score = await response.json();
 
-        if (score && score.score && score.score > getSnowflakeCount()) {
-            setSnowflakeCount(score.score);
+        if (score && score.score && score.score >= getSnowflakeCount()) {
+            setSnowflakeCount(score.score, score.name, score.position);
         }
     } catch (error) {
         console.error('Error fetching user score:', error);
@@ -219,13 +219,13 @@ export function initLeaderboard() {
     postUserScore();
 
     // Start updates
-    setInterval(fetchUserScore, 5000);
-    setInterval(postUserScore, 5000);
-    setInterval(updateCountdownTimer, 1000);
     setInterval(() => {
+        postUserScore();
+        fetchUserScore();
         fetchLeaders();
         fetchTotalSnowflakes();
     }, 10000);
+    setInterval(updateCountdownTimer, 1000);
 
     // On mobile devices, start with collapsed leaderboard
     if (window.innerWidth <= 768) {

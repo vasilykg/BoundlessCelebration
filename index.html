@@ -113,9 +113,13 @@
     <ul class="leaderboard-list" id="leaderboardList">
     </ul>
     <button class="join-button" id="joinButton" data-i18n="button.join"></button>
-    <div class="current-score" id="currentScore" style="display: none">
-        <span data-i18n="leaderboard.your_score"></span> <span id="userScore">0</span>
-    </div>
+    <ul class="leaderboard-list" style="margin-top: 10px">
+        <li class="leaderboard-item" id="currentScore" style="display: none">
+            <span class="position" id="userPosition"></span>
+            <span class="name" id="userName"></span>
+            <span class="score" id="userScore"></span>
+        </li>
+    </ul>
 </div>
 
 <script type="module" src="js/main.js"></script>

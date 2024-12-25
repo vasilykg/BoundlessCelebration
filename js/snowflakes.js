@@ -1,9 +1,11 @@
 // Управление снежинками
 import { INACTIVITY_DELAY } from './config.js';
 
-let snowflakeCount = parseInt(localStorage.getItem('snowflakeCountX') || '0');
+let snowflakeCount = parseInt(localStorage.getItem('snowflakeCountX') || '0') || 0;
 let lastSnowflakeTime = Date.now();
 let inactivityTimeout;
+let currentUserName = localStorage.getItem('snowflakeUsernameX') || "";
+let currentUserPosition = "0";
 
 export function initSnowflakes() {
     updateSnowflakeCountUI();
@@ -78,17 +80,28 @@ function updateSnowflakeCount() {
 
 function updateSnowflakeCountUI() {
     const snowflakeCountElement = document.getElementById('snowflakeCount');
+    const userPositionSpan = document.getElementById('userPosition');
+    const userNameSpan = document.getElementById('userName');
     const userScoreSpan = document.getElementById('userScore');
-    
+
     snowflakeCountElement.textContent = snowflakeCount;
-    userScoreSpan.textContent = snowflakeCount;
+    userScoreSpan.textContent = '' + snowflakeCount + ' ❄';
+
+    if (currentUserName) {
+        userNameSpan.textContent = currentUserName;
+    }
+    if (currentUserPosition) {
+        userPositionSpan.textContent = currentUserPosition;
+    }
 }
 
 export function getSnowflakeCount() {
     return snowflakeCount;
 }
 
-export function setSnowflakeCount(count) {
+export function setSnowflakeCount(count, userName = null, userPosition = null) {
     snowflakeCount = count;
+    currentUserName = userName;
+    currentUserPosition = userPosition;
     updateSnowflakeCountUI();
 } 
