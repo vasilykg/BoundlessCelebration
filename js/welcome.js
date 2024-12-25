@@ -80,6 +80,23 @@ export function initWelcomeScreen() {
     });
 }
 
+function unicodeFlagToImg(text, size = 1, padding = 0.1) {
+    return text.replaceAll(
+        /[\uD83C][\uDDE6-\uDDFF][\uD83C][\uDDE6-\uDDFF]/g,
+        (match) => {
+            const regionCode = [...match.matchAll(/[\uDDE6-\uDDFF]/g)]
+                .map(
+                    (m) =>
+                        'abcdefghijklmnopqrstuvwxyz'[m[0].charCodeAt(0) - 56806]
+                )
+                .join('');
+            return `<img src="resources/flags/${regionCode}.svg" alt="${match}" style="width: ${
+                size * (1 - padding)
+            }em; padding: 0 ${size * (padding / 2)}em">`;
+        }
+    );
+}
+
 // Обработчик кнопки празднования
 export function initCelebrationButton() {
     const celebrateBtn = document.getElementById('celebrateBtn');
@@ -123,7 +140,7 @@ export function initCelebrationButton() {
             "🇹🇳 🇩🇿 🇲🇦 سنة جديدة سعيدة",
             "🇬🇳 🇲🇺 🇲🇬 Bonne année!"
         ];
-        const marqueeText = goodWishes.join('\xa0\xa0❄️\xa0\xa0');
+        const marqueeText = unicodeFlagToImg( goodWishes.join('\xa0\xa0❄️\xa0\xa0'), 1, 0);
 
         let goodWishesBlock = document.querySelector('.good-wishes');
         goodWishesBlock.style.display = 'block';
