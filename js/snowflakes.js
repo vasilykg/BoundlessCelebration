@@ -5,7 +5,7 @@ let snowflakeCount = parseInt(localStorage.getItem('snowflakeCountX') || '0') ||
 let lastSnowflakeTime = Date.now();
 let inactivityTimeout;
 let currentUserName = localStorage.getItem('snowflakeUsernameX') || "";
-let currentUserPosition = "0";
+let currentUserPosition = 0;
 
 export function initSnowflakes() {
     updateSnowflakeCountUI();
@@ -91,7 +91,7 @@ function updateSnowflakeCountUI() {
         userNameSpan.textContent = currentUserName;
     }
     if (currentUserPosition) {
-        userPositionSpan.textContent = currentUserPosition;
+        userPositionSpan.textContent = '' + currentUserPosition;
     }
 }
 
@@ -100,8 +100,8 @@ export function getSnowflakeCount() {
 }
 
 export function setSnowflakeCount(count, userName = null, userPosition = null) {
-    snowflakeCount = count;
-    currentUserName = userName;
-    currentUserPosition = userPosition;
+    if (count && count > snowflakeCount) snowflakeCount = count;
+    if (userName && userName !== '') currentUserName = userName;
+    if (userPosition && userPosition > 0) currentUserPosition = userPosition;
     updateSnowflakeCountUI();
 } 
