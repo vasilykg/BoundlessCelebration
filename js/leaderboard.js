@@ -159,10 +159,8 @@ async function fetchUserScore() {
             return;
         }
         const score = await response.json();
+        setSnowflakeCount(score.score || 0, score.name || '', score.position || 0);
 
-        if (score && score.score && score.score >= getSnowflakeCount()) {
-            setSnowflakeCount(score.score, score.name, score.position);
-        }
     } catch (error) {
         console.error('Error fetching user score:', error);
     }
